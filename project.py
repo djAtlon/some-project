@@ -75,37 +75,42 @@ def main():
     categoryId = 1
     productId = 1 
     database = r'C:\stuff\uni_course 4\pythonStuff\project\database.db'
-    main_url = 'https://rozetka.com.ua/'
-    laptop_and_pc_url = 'https://rozetka.com.ua/computers-notebooks/c80253/'
-    phones_and_TVs_url = 'https://rozetka.com.ua/telefony-tv-i-ehlektronika/c4627949/'
-    gaming_url = 'https://rozetka.com.ua/game-zone/c80261/'
-    laptop_url = 'https://rozetka.com.ua/notebooks/c80004/'
+    # main_url = 'https://rozetka.com.ua/'
+    # laptop_and_pc_url = 'https://rozetka.com.ua/computers-notebooks/c80253/'
+    # phones_and_TVs_url = 'https://rozetka.com.ua/telefony-tv-i-ehlektronika/c4627949/'
+    # gaming_url = 'https://rozetka.com.ua/game-zone/c80261/'
+    # laptop_url = 'https://rozetka.com.ua/notebooks/c80004/'
 
-    response = requests.get(main_url)
-    soup = bs(response.text, 'lxml')
-    categories = soup.find_all('span', class_ = 'main-categories__link-text')
+    # response = requests.get(main_url)
+    # soup = bs(response.text, 'lxml')
+    # categories = soup.find_all('span', class_ = 'main-categories__link-text')
 
-    response = requests.get(laptop_and_pc_url)
-    soup = bs(response.text, 'lxml')
-    productsLaptopPC = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
+    # response = requests.get(laptop_and_pc_url)
+    # soup = bs(response.text, 'lxml')
+    # productsLaptopPC = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
 
-    response = requests.get(phones_and_TVs_url)
-    soup = bs(response.text, 'lxml')
-    productsPhonesTVs = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
+    # response = requests.get(phones_and_TVs_url)
+    # soup = bs(response.text, 'lxml')
+    # productsPhonesTVs = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
 
-    response = requests.get(gaming_url)
-    soup = bs(response.text, 'lxml')
-    gaming = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
+    # response = requests.get(gaming_url)
+    # soup = bs(response.text, 'lxml')
+    # gaming = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
 
-    response = requests.get(laptop_url)
-    soup = bs(response.text, 'lxml')
-    laptops = []
-    while len(laptops) != 15:
-        laptops = soup.find_all('label')
-    for l in laptops:
-        print(l)
-
+    # response = requests.get(laptop_url)
+    # soup = bs(response.text, 'lxml')
+    # laptops = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Huawei', 'Lenovo', 'MSI', 'Microsoft', 'Razer', 'Samsung', 'Xiaomi']
+    # laptopsAmount = soup.find_all('span', class_= 'si debar-block__quantity ng-star-inserted')
     
+
+    response = requests.get('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_smartfon.html')
+    soup = bs(response.text, 'lxml')
+    print(response.status_code)
+    div = soup.find_all('label', class_ = 'brand')
+    print(div)
+    # for a in amount:
+    #     print(a.text)
+
     connection = create_connection(database)
     
     # CREATING TABLE CATEGIRIES AND PRODUCTS AND INTO IT
