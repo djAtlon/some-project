@@ -1,24 +1,26 @@
-from sqlite3.dbapi2 import Cursor, connect
-from requests.models import cookiejar_from_dict
-import telebot
+from sqlite3.dbapi2 import SQLITE_CREATE_TABLE, Cursor, connect
 import requests
 import sqlite3
 from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
 
-def create_connection(db_file):
+
+
+def createConnection(databaseFile):
     connection = None
     try:
-        connection = sqlite3.connect(db_file)
+        connection = sqlite3.connect(databaseFile)
         return connection
     except Error as error:
         print(error)
     return connection
 
-def create_table_categories(connection):
-    sql_create_table = """ CREATE TABLE IF NOT EXISTS categories(
+
+def createCategoriesTable(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS categories(
                             id int PRIMARY KEY NOT NULL,
-                            category_name text NOT NULL);"""
+                            name text NOT NULL);"""
+    
     try:
         cursor = connection.cursor()
         cursor.execute(sql_create_table)
@@ -26,12 +28,12 @@ def create_table_categories(connection):
         print(error)
 
 
-def create_table_products(connection):
-    sql_create_table = """ CREATE TABLE IF NOT EXISTS products(
+def createProductsTable(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS products(
                             id int PRIMARY KEY NOT NULL,
-                            product_name text NOT NULL,
+                            name text NOT NULL,
                             category_id int NOT NULL,
-                            FOREIGN KEY (category_id) REFERENCES categories (id));"""
+                            FOREIGN KEY (category_id) REFERENCES categories(id));"""
     try:
         cursor = connection.cursor()
         cursor.execute(sql_create_table)
@@ -39,105 +41,91 @@ def create_table_products(connection):
         print(error)
 
 
-def create_table_laptop(connection):
-    sql_create_table = """ CREATE TABLE IF NOT EXISTS laptop(
-                            laptop_id int PRIMARY KEY NOT NULL,
-                            mark_name text NOT NULL,
-                            product_id int NOT NULL,
-                            amount int NOT NULL,
-                            FOREIGN KEY (product_id) REFERENCES products (id));"""
+
+def insertCategories(connection, category):
+    sql_insert_into_table = """INSERT INTO categories VALUES(?,?);"""
     try:
         cursor = connection.cursor()
-        cursor.execute(sql_create_table)
+        cursor.execute(sql_insert_into_table, category)
+        connection.commit()
     except Error as error:
         print(error)
 
 
-def insert_into_table_categories(connection, category):
-    sql_insert_into_table = """ INSERT INTO categories VALUES(?, ?);"""
-    cursor = connection.cursor()
-    cursor.execute(sql_insert_into_table, category)
-    connection.commit()
-    return cursor.lastrowid
+def insertProducts(connection, product):
+    sql_insert_into_table = """INSERT INTO products VALUES(?,?,?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, product)
+        connection.commit()
+    except Error as error:
+        print(error)
 
 
+def getResponse(url):
+    response = requests.get(url)
+    return response
 
-def insert_into_table_product(connection, product):
-    sql_insert_into_table = """ INSERT INTO products VALUES(?, ?, ?);"""
-    cursor = connection.cursor()
-    cursor.execute(sql_insert_into_table, product)
-    connection.commit()
-    return cursor.lastrowid
 
 
 
 def main():
-    categoryId = 1
-    productId = 1 
-    database = r'C:\stuff\uni_course 4\pythonStuff\project\database.db'
-    # main_url = 'https://rozetka.com.ua/'
-    # laptop_and_pc_url = 'https://rozetka.com.ua/computers-notebooks/c80253/'
-    # phones_and_TVs_url = 'https://rozetka.com.ua/telefony-tv-i-ehlektronika/c4627949/'
-    # gaming_url = 'https://rozetka.com.ua/game-zone/c80261/'
-    # laptop_url = 'https://rozetka.com.ua/notebooks/c80004/'
-
-    # response = requests.get(main_url)
-    # soup = bs(response.text, 'lxml')
-    # categories = soup.find_all('span', class_ = 'main-categories__link-text')
-
-    # response = requests.get(laptop_and_pc_url)
-    # soup = bs(response.text, 'lxml')
-    # productsLaptopPC = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
-
-    # response = requests.get(phones_and_TVs_url)
-    # soup = bs(response.text, 'lxml')
-    # productsPhonesTVs = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
-
-    # response = requests.get(gaming_url)
-    # soup = bs(response.text, 'lxml')
-    # gaming = soup.find_all('a', class_ = 'tile-cats__heading tile-cats__heading_type_center ng-star-inserted')
-
-    # response = requests.get(laptop_url)
-    # soup = bs(response.text, 'lxml')
-    # laptops = ['Acer', 'Apple', 'Asus', 'Dell', 'HP', 'Huawei', 'Lenovo', 'MSI', 'Microsoft', 'Razer', 'Samsung', 'Xiaomi']
-    # laptopsAmount = soup.find_all('span', class_= 'si debar-block__quantity ng-star-inserted')
-    
-
-    response = requests.get('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_smartfon.html')
+    databaseFile = r'C:\work\tb\uni\project\some-project\database.db'
+    connection = createConnection(databaseFile)
+    response = getResponse('https://www.foxtrot.com.ua/')
     soup = bs(response.text, 'lxml')
-    print(response.status_code)
-    div = soup.find_all('label', class_ = 'brand')
-    print(div)
-    # for a in amount:
-    #     print(a.text)
+    categories = soup.find_all('li', class_ = 'js-hover-catalog-category')
+    phonesAndStuff = [] #телефоны наушники и тд
+    laptopsPC = [] #ноутбуки компьютеры планшеты
 
-    connection = create_connection(database)
+    response = getResponse('https://www.foxtrot.com.ua/ru/portal-smartfoni-i-telefoni.html')
+    soup = bs(response.text, 'lxml')
+    helpArr = soup.find_all('div', class_ = 'category__item-title js-toggle-accordion')
+    for item in helpArr:
+        if item.text.strip() == 'Смартфоны' or item.text.strip() == 'Аксессуары для смартфонов' or item.text.strip() == 'Портативная акустика' or item.text.strip() == 'Наборы для блогеров':
+            phonesAndStuff.append(item.text.strip())
+    helpArr = []
+
+    response = getResponse('https://www.foxtrot.com.ua/ru/portal-tehnika-dlia-kuhni.html')
+    soup = bs(response.text, 'lxml')
+    kitchenTechs = soup.find_all('div', class_ = 'category__item-title js-toggle-accordion') #техника для кухни
     
-    # CREATING TABLE CATEGIRIES AND PRODUCTS AND INTO IT
-    # with connection:
-    #     create_table_categories(connection)
-    #     create_table_products(connection)
-    #     create_table_laptop(connection)
-    # with connection:
-    #     for c in categories:
-    #         category = (categoryId, c.text)
-    #         category_id = insert_into_table_categories(connection, category)
-    #         categoryId += 1
-    #     for p in productsLaptopPC:
-    #         product = (productId, p.text, 1)
-    #         productLaptopPC_id = insert_into_table_product(connection, product)
-    #         productId += 1
-    #     for p in productsPhonesTVs:
-    #         product = (productId, p.text, 2)
-    #         productPhoneTVs_id = insert_into_table_product(connection, product)
-    #         productId += 1
-    #     for g in gaming:
-    #         product = (productId, g.text, 3)
-    #         gaming_id = insert_into_table_product(connection, product)
-    #         productId += 1
+    response = getResponse('https://www.foxtrot.com.ua/ru/portal-tehnika-dlia-doma.html')
+    soup = bs(response.text, 'lxml')
+    homeTechs = soup.find_all('div', class_ = 'category__item-title js-toggle-accordion') #техника для дома
+
+    response = getResponse('https://www.foxtrot.com.ua/ru/portal-noutbuky-planshety-pk.html') #ноутбуки и планшеты
+    soup = bs(response.text, 'lxml')
+    helpArr = soup.find_all('div', class_ = 'category__item-title js-toggle-accordion')
+    for item in helpArr:
+        if item.text.strip() == 'Ноутбуки' or item.text.strip() == 'Планшеты' or item.text.strip() == 'Компьютеры' or item.text.strip() == 'Компьютерная периферия':
+            laptopsPC.append(item.text.strip())
+    
+    
+    
+    
+
+    with connection:
+        createCategoriesTable(connection)
+        createProductsTable(connection)
+        for categoryId, category in enumerate(categories, start=1):
+            c = (categoryId, category.text.strip())
+            insertCategories(connection, c)
+        for phoneAndStuffId, phoneAndStuff in enumerate(phonesAndStuff, start=1):
+            p = (phoneAndStuffId, phoneAndStuff, 1)
+            insertProducts(connection, p)
+        for kitchenId, kitchenTech in enumerate(kitchenTechs, start=5):
+            k = (kitchenId, kitchenTech.text.strip(), 2)
+            insertProducts(connection, k)
+        for homeId, homeTech in enumerate(homeTechs, start=13):
+            h = (homeId, homeTech.text.strip(), 3)
+            insertProducts(connection, h)
+        for laptopPCId, laptopPC in enumerate(laptopsPC, start=21):
+            l = (laptopPCId, laptopPC, 4)
+            insertProducts(connection, l)
         
-            
-    #--------------------------------------------
+
+
 
 if __name__ == '__main__':
     main()
