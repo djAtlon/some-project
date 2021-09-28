@@ -104,7 +104,7 @@ def main():
     
     
     
-
+    print("Start creating tables and insert data into it")
     with connection:
         createCategoriesTable(connection)
         createProductsTable(connection)
