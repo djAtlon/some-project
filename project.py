@@ -5,7 +5,8 @@ from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
 from requests.models import cookiejar_from_dict
 from phoneModels import createSamsungPhone, createApplePhone, createHuaweiPhone, createMeizuPhone, createOneplusPhone, createOppoPhone, createXiaomiPhone, insertSamsungPhones, insertApplePhones, insertHuaweiPhones, insertMeizuPhones, insertOneplusPhones, insertOppoPhones, insertXiaomiPhones
-
+from tvs import createTvBrands, createSamsungTv, createLgTv, createXiaomiTv, createSonyTv, createPhilipsTv, createToshibaTv, insertTvBrands,insertSamsungTv, insertLgTv, insertXiaomiTv, insertSonyTv, insertPhilipsTv, insertToshibaTv
+from tvs import tvBrandsAndStuff, samsungTvs, lgTvs, xiaomiTvs, sonyTvs, philipsTvs, toshibaTvs
 
 def returnPrice(helpArr):
     priceArr = []
@@ -110,7 +111,6 @@ def main():
     connection = createConnection(databaseFile)
     mainUrl = 'https://www.foxtrot.com.ua'
     response = getResponse('https://www.foxtrot.com.ua/')
-    # response = getResponse('https://www.foxtrot.com.ua/')
     soup = bs(response.text, 'lxml')
     categories = soup.find_all('li', class_ = 'js-hover-catalog-category') # категории
     phonesAndStuff = [] #телефоны наушники и тд
@@ -145,6 +145,11 @@ def main():
     urlsHuawei = []
     huaweiPhones = {}
     huaweiPhonesPrice = []
+
+    meizuNames = []
+    urlsMeizu = []
+    meizuPhones = {}
+    meizuPhonesPrice = []
 
     oneplusNames = []
     urlsOneplus = []
@@ -191,7 +196,7 @@ def main():
         if item.text.strip() == 'Телевизоры' or item.text.strip() == 'Проекционное оборудование' or item.text.strip() == 'Аудиотехника' or item.text.strip() == 'Аксессуары к телевизорам':
             tvsAudio.append(item.text.strip())
     helpArr = []
-    #----------------------------------------------------------------------------
+    #---------------------------------------------------------------------------
 
 
     # ДЛЯ ГЕЙМЕРОВ
@@ -216,28 +221,27 @@ def main():
     helpArr = soup.find_all('span', class_ = 'amount')
     for item in helpArr:    
         amount.append(item.text.strip())
-        if len(amount) == 26:
+        if len(amount) == 20:
             break
     helpArr = []
     new_amount = []
     for a in amount:
-        if a == '103':
+        if a == '102':
             new_amount.append(int(a))
-        if a == '149':
+        if a == '148':
             new_amount.append(int(a))
-        if a >= '70':
+        if a == '66':
             new_amount.append(int(a))
         if a == '26':
             new_amount.append(int(a))
         if a == '10':
             new_amount.append(int(a))
-        if a == '1':
-            new_amount.append(int(a))
         if a == '7':
             new_amount.append(int(a))
             break
-    new_amount.remove(1)
-    new_amount.remove(9)
+    # new_amount.insert(5, 1)
+    # # new_amount.remove(1)
+    # # new_amount.remove(9)
     # print(len(new_amount), new_amount)
     # print('\n')
     # print(len(phonesBrand), phonesBrand)
@@ -280,6 +284,7 @@ def main():
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
     iphonesPrice = returnPrice(helpArr)
+    helpArr = []
     for iphoneName in namesIphones:
         iphones[iphoneName] = []
         for i in range(0, len(iphonesPrice)):
@@ -302,6 +307,7 @@ def main():
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
     xiaomiPhonesPrice = returnPrice(helpArr)
+    helpArr = []
     for xiaomiName in xiaomiNames:
         xiaomiPhones[xiaomiName] = []
         for i in range(0, len(xiaomiPhonesPrice)):
@@ -324,6 +330,7 @@ def main():
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
     oppoPhonesPrice = returnPrice(helpArr)
+    helpArr = []
     for oppoName in oppoNames:
         oppoPhones[oppoName] = []
         for i in range(0, len(oppoPhonesPrice)):
@@ -350,6 +357,7 @@ def main():
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
     huaweiPhonesPrice = returnPrice(helpArr)
+    helpArr = []
     for huaweiName in huaweiNames:
         huaweiPhones[huaweiName] = []
         for i in range(0, len(huaweiPhonesPrice)):
@@ -360,9 +368,32 @@ def main():
                 urlsHuawei.remove(urlsHuawei[j])
                 break
             break
+    
     #--------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ МЕЙЗУ
+    response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_meizu_smartfon.html')
+    soup = bs(response.text, 'lxml')
+    helpArr = soup.find_all('a', class_ = 'card__title')
+    for item in helpArr:
+        meizuNames.append(item.text.strip())
+        urlsMeizu.append(item.get('href'))
+        if len(meizuNames) == 1 and len(urlsMeizu):
+            break
+    helpArr = []
+    helpArr = soup.find_all('div', class_ = 'card-price')
+    meizuPhonesPrice = returnPrice(helpArr)
+    helpArr = []
+    for meizuName in meizuNames:
+        meizuPhones[meizuName] = []
+        for i in range(0, len(meizuPhonesPrice)):
+            meizuPhones[meizuName].append(meizuPhonesPrice[i])
+            for j in range(0, len(urlsMeizu)):
+                meizuPhones[meizuName].append(str(mainUrl + urlsMeizu[j]))
+                break
+            break
+    #--------------------------------------------------------------------------------------------------
+    
     
 
 
@@ -378,6 +409,7 @@ def main():
         oneplusNames.append(item.text.strip())
         urlsOneplus.append(item.get('href'))
     helpArr = []
+    helpArr = soup.find_all('div', 'card-price')
     oneplusPhonesPrice = returnPrice(helpArr)
     for oneplusName in oneplusNames:
         oneplusPhones[oneplusName] = []
@@ -394,64 +426,102 @@ def main():
 
 
 
-    # with connection:
-    #     createCategoriesTable(connection)
-    #     createProductsTable(connection)
-    #     createPhonesBrandTable(connection)
-    #     for categoryId, category in enumerate(categories, start=1):
-    #         c = (categoryId, category.text.strip())
-    #         insertCategories(connection, c)
-    #     for phoneAndStuffId, phoneAndStuff in enumerate(phonesAndStuff, start=1):
-    #         p = (phoneAndStuffId, phoneAndStuff, 1)
-    #         insertProducts(connection, p)
-    #     for kitchenId, kitchenTech in enumerate(kitchenTechs, start=5):
-    #         k = (kitchenId, kitchenTech.text.strip(), 2)
-    #         insertProducts(connection, k)
-    #     for homeId, homeTech in enumerate(homeTechs, start=13):
-    #         h = (homeId, homeTech.text.strip(), 3)
-    #         insertProducts(connection, h)
-    #     for laptopPCId, laptopPC in enumerate(laptopsPC, start=21):
-    #         l = (laptopPCId, laptopPC, 4)
-    #         insertProducts(connection, l)
-    #     for tvId, tvAudio in enumerate(tvsAudio, start=25):
-    #         t = (tvId, tvAudio, 5)
-    #         insertProducts(connection, t)
-    #     for gamingId, forGamer in enumerate(forGamers, start=29):
-    #         g = (gamingId, forGamer, 6)
-    #         insertProducts(connection, g)
-    #     for index, phone in enumerate(phoneBrandAndAmount, start=1):
-    #         p = (index, phone, phoneBrandAndAmount.get(phone), 1)
-    #         insertPhonesBrand(connection, p)
-    
-    # with connection:
-    #     createSamsungPhone(connection)
-    #     createApplePhone(connection)
-    #     createXiaomiPhone(connection)
-    #     createOppoPhone(connection)
-    #     createHuaweiPhone(connection)
-    #     createOneplusPhone(connection)
-    #     for samsungPhoneId, samsungPhone in enumerate(samsungPhones, start=1):
-    #         s = (samsungPhoneId, samsungPhone, samsungPhones.get(samsungPhone)[0], 1, samsungPhones.get(samsungPhone)[1])
-    #         insertSamsungPhones(connection, s)
-    #     for iphoneId, iphone in enumerate(iphones, start=1):
-    #         i = (iphoneId, iphone, iphones.get(iphone)[0], 2, iphones.get(iphone)[1])
-    #         insertApplePhones(connection, i)
-    #     for xiaomiPhoneId, xiaomiPhone in enumerate(xiaomiPhones, start=1):
-    #         x = (xiaomiPhoneId, xiaomiPhone, xiaomiPhones.get(xiaomiPhone)[0], 3, xiaomiPhones.get(xiaomiPhone)[1])
-    #         insertXiaomiPhones(connection, x)
-    #     for oppoPhoneId, oppoPhone in enumerate(oppoPhones, start=1):
-    #         oppo = (oppoPhoneId, oppoPhone, oppoPhones.get(oppoPhone)[0], 4, oppoPhones.get(oppoPhone)[1])
-    #         insertOppoPhones(connection, oppo)
-    #     for huaweiId, huaweiPhone in enumerate(huaweiPhones, start=1):
-    #         h = (huaweiId, huaweiPhone, huaweiPhones.get(huaweiName)[0], 5, huaweiPhones.get(huaweiName)[1])
-    #         insertHuaweiPhones(connection, h)
-    #     for oneplusId, oneplusPhone in enumerate(oneplusPhones, start=1):
-    #         oneplus = (oneplusId, oneplusPhone, oneplusPhones.get(oneplusPhone)[0], 6, oneplusPhones.get(oneplusPhone)[1])
-    #         insertOneplusPhones(connection, h)
-        
-        
+    with connection:
+        createCategoriesTable(connection)
+        createProductsTable(connection)
+        createPhonesBrandTable(connection)
+        for categoryId, category in enumerate(categories, start=1):
+            c = (categoryId, category.text.strip())
+            insertCategories(connection, c)
 
-        
+        for phoneAndStuffId, phoneAndStuff in enumerate(phonesAndStuff, start=1):
+            p = (phoneAndStuffId, phoneAndStuff, 1)
+            insertProducts(connection, p)
+        for tvId, tvAudio in enumerate(tvsAudio, start=5):
+            t = (tvId, tvAudio, 2)
+            insertProducts(connection, t)
+        for kitchenId, kitchenTech in enumerate(kitchenTechs, start=9):
+            k = (kitchenId, kitchenTech.text.strip(), 3)
+            insertProducts(connection, k)
+        for homeId, homeTech in enumerate(homeTechs, start=17):
+            h = (homeId, homeTech.text.strip(), 4)
+            insertProducts(connection, h)
+        for laptopPCId, laptopPC in enumerate(laptopsPC, start=25):
+            l = (laptopPCId, laptopPC, 5)
+            insertProducts(connection, l)
+        for gamingId, forGamer in enumerate(forGamers, start=29):
+            g = (gamingId, forGamer, 6)
+            insertProducts(connection, g)
+
+        for index, phone in enumerate(phoneBrandAndAmount, start=1):
+            p = (index, phone, phoneBrandAndAmount.get(phone), 1)
+            insertPhonesBrand(connection, p)
+    
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ МОДЕЛЕЙ ТЕЛЕФОНОВ
+    with connection:
+        createSamsungPhone(connection)
+        createApplePhone(connection)
+        createXiaomiPhone(connection)
+        createOppoPhone(connection)
+        createHuaweiPhone(connection)
+        createMeizuPhone(connection)
+        createOneplusPhone(connection)
+        for samsungPhoneId, samsungPhone in enumerate(samsungPhones, start=1):
+            s = (samsungPhoneId, samsungPhone, samsungPhones.get(samsungPhone)[0], 1, samsungPhones.get(samsungPhone)[1])
+            insertSamsungPhones(connection, s)
+        for iphoneId, iphone in enumerate(iphones, start=1):
+            i = (iphoneId, iphone, iphones.get(iphone)[0], 2, iphones.get(iphone)[1])
+            insertApplePhones(connection, i)
+        for xiaomiPhoneId, xiaomiPhone in enumerate(xiaomiPhones, start=1):
+            x = (xiaomiPhoneId, xiaomiPhone, xiaomiPhones.get(xiaomiPhone)[0], 3, xiaomiPhones.get(xiaomiPhone)[1])
+            insertXiaomiPhones(connection, x)
+        for oppoPhoneId, oppoPhone in enumerate(oppoPhones, start=1):
+            oppo = (oppoPhoneId, oppoPhone, oppoPhones.get(oppoPhone)[0], 4, oppoPhones.get(oppoPhone)[1])
+            insertOppoPhones(connection, oppo)
+        for huaweiId, huaweiPhone in enumerate(huaweiPhones, start=1):
+            h = (huaweiId, huaweiPhone, huaweiPhones.get(huaweiPhone)[0], 5, huaweiPhones.get(huaweiPhone)[1])
+            insertHuaweiPhones(connection, h)
+        for meizuId, meizuPhone in enumerate(meizuPhones, start=1):
+            m = (meizuId, meizuPhone, meizuPhones.get(meizuPhone)[0], 6, meizuPhones.get(meizuPhone)[1])
+            insertMeizuPhones(connection, m)
+        for oneplusId, oneplusPhone in enumerate(oneplusPhones, start=1):
+            oneplus = (oneplusId, oneplusPhone, oneplusPhones.get(oneplusPhone)[0], 7, oneplusPhones.get(oneplusPhone)[1])
+            insertOneplusPhones(connection, oneplus)
+    #-----------------------------------------
+    # for t in tvBrandsAndStuff:
+    #     print(tvBrandsAndStuff.get(t)[0])
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ МОДЕЛЕЙ ТЕЛЕВИЗОРОВ
+    with connection:
+        createTvBrands(connection)
+        createSamsungTv(connection)
+        createLgTv(connection)
+        createXiaomiTv(connection)
+        createSonyTv(connection)
+        createPhilipsTv(connection)
+        createToshibaTv(connection)
+        for tvBrandId, tvBrand in enumerate(tvBrandsAndStuff, start=1):
+            t = (tvBrandId, tvBrand, tvBrandsAndStuff.get(tvBrand), 5)
+            insertTvBrands(connection, t)
+        for samsungTvId, samsungTv in enumerate(samsungTvs, start=1):
+            s = (samsungTvId, samsungTv, samsungTvs.get(samsungTv)[0], 1, samsungTvs.get(samsungTv)[1])
+            insertSamsungTv(connection, s)
+        for lgTvId, lgTv in enumerate(lgTvs, start=1):
+            l = (lgTvId, lgTv, lgTvs.get(lgTv)[0], 2, lgTvs.get(lgTv)[1])
+            insertLgTv(connection, l)
+        for xaiomiTvId, xiaomiTv in enumerate(xiaomiTvs, start=1):
+            x = (xaiomiTvId, xiaomiTv, xiaomiTvs.get(xiaomiTv)[0], 3, xiaomiTvs.get(xiaomiTv)[1])
+            insertXiaomiTv(connection, x)
+        for sonyTvId, sonyTv in enumerate(sonyTvs, start=1):
+            s = (sonyTvId, sonyTv, sonyTvs.get(sonyTv)[0], 4, sonyTvs.get(sonyTv)[1])
+            insertSonyTv(connection, s)
+        for philipsTvId, philipsTv in enumerate(philipsTvs, start=1):
+            p = (philipsTvId, philipsTv, philipsTvs.get(philipsTv)[0], 5, philipsTvs.get(philipsTv)[1])
+            insertPhilipsTv(connection, p)
+        for toshibaTvId, toshibaTv in enumerate(toshibaTvs, start=1):
+            t = (toshibaTvId, toshibaTv, toshibaTvs.get(toshibaTv)[0], 6, toshibaTvs.get(toshibaTv)[1])
+            insertToshibaTv(connection, t)
+    #-----------------------------------------------------------------------------------------------------------------------
+
 
 
 
