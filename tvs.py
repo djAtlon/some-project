@@ -240,23 +240,22 @@ helpArr = []
 helpArr = soup.find_all('span', class_ = 'amount')
 for item in helpArr:
     if item.text.strip().isdigit():
-        if len(amount) == 9:
+        if len(amount) == 5:
             break
-        if item.text.strip() == '102':
+        if item.text.strip() == '99':
             amount.append(int(item.text))
-        elif item.text.strip() == '66':
+        elif item.text.strip() == '68':
             amount.append(int(item.text))
         elif item.text.strip() == '3':
             amount.append(int(item.text))
-        elif item.text.strip() == '42':
+        elif item.text.strip() == '43':
             amount.append(int(item.text))
-        elif item.text.strip() == '32':
+        elif item.text.strip() == '31':
             amount.append(int(item.text))
-        elif item.text.strip() == '11':
-            amount.append(int(item.text))
-amount.remove(11)
-amount.pop(len(amount)-2)
-amount.pop(len(amount)-2)
+
+amount.append(11)
+# amount.pop(len(amount)-2)
+# amount.pop(len(amount)-2)
 for i in range(0, len(tvBrands)):
     tvBrandsAndStuff[tvBrands[i]] = amount[i]
 helpArr = []
