@@ -7,6 +7,12 @@ from requests.models import cookiejar_from_dict
 from phoneModels import createSamsungPhone, createApplePhone, createHuaweiPhone, createMeizuPhone, createOneplusPhone, createOppoPhone, createXiaomiPhone, insertSamsungPhones, insertApplePhones, insertHuaweiPhones, insertMeizuPhones, insertOneplusPhones, insertOppoPhones, insertXiaomiPhones
 from tvs import createTvBrands, createSamsungTv, createLgTv, createXiaomiTv, createSonyTv, createPhilipsTv, createToshibaTv, insertTvBrands,insertSamsungTv, insertLgTv, insertXiaomiTv, insertSonyTv, insertPhilipsTv, insertToshibaTv
 from tvs import tvBrandsAndStuff, samsungTvs, lgTvs, xiaomiTvs, sonyTvs, philipsTvs, toshibaTvs
+from laptops import createLaptopsBrands, createLenovoLaptop, createAsusLaptop, createAcerLaptop, createAppleLaptop, createHpLaptop, createDellLaptop
+from laptops import insertLaptopBrands, insertLenovoLaptop, insertAsusLaptop, insertAcerLaptop, insertAppleLaptop, insertHpLaptop, insertDellLaptop
+from laptops import laptopBrandsAndAmount, lenovoLaptops, asusLaptops, acerLaptops, macbooks, hpLaptops, dellLaptops
+from tablet import createTabletBrands, createSamsungTablet, createLenovoTablet, createAppleTablet, createAlcatelTablet, createHuaweiTablet
+from tablet import insertTabletpBrands, insertSamsungTablet, insertLenovoTablet, insertAppleTablet, insertAlcatelTablet, insertHuaweiTablet
+from tablet import tabletBrandsAndStuff, samsungTablets, lenovoTablets, ipads, alcatelTablets, huaweiTablets
 
 def returnPrice(helpArr):
     priceArr = []
@@ -208,7 +214,7 @@ def main():
         if len(forGamers) == 8:
             break
     helpArr = []
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------''
 
     # ДЛЯ ИМЕН БРЕНДОВ ТЕЛЕФОНОВ И ИХ КОЛ-ВА
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_smartfon.html')
@@ -226,7 +232,7 @@ def main():
     helpArr = []
     new_amount = []
     for a in amount:
-        if a == '102':
+        if a == '103':
             new_amount.append(int(a))
         if a == '148':
             new_amount.append(int(a))
@@ -242,12 +248,13 @@ def main():
     # new_amount.insert(5, 1)
     # # new_amount.remove(1)
     # # new_amount.remove(9)
+    # print(len(phonesBrand), phonesBrand)
     # print(len(new_amount), new_amount)
     # print('\n')
     # print(len(phonesBrand), phonesBrand)
     for i in range(0, len(phonesBrand)):
         phoneBrandAndAmount[phonesBrand[i]] = new_amount[i]
-    #--------------------------------------------------------------------
+    # --------------------------------------------------------------------
 
 
     # ТЕЛЕФОНЫ САМСУНГ
@@ -421,7 +428,7 @@ def main():
                 urlsOneplus.remove(urlsOneplus[j])
                 break
             break
-    #---------------------------------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------------------------------
 
 
 
@@ -520,6 +527,47 @@ def main():
         for toshibaTvId, toshibaTv in enumerate(toshibaTvs, start=1):
             t = (toshibaTvId, toshibaTv, toshibaTvs.get(toshibaTv)[0], 6, toshibaTvs.get(toshibaTv)[1])
             insertToshibaTv(connection, t)
+    
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ МОДЕЛЕЙ НОУТБУКОВ
+    with connection:
+        createLaptopsBrands(connection)
+        createLenovoLaptop(connection)
+        createAsusLaptop(connection)
+        createAcerLaptop(connection)
+        createAppleLaptop(connection)
+        createHpLaptop(connection)
+        createDellLaptop(connection)
+        for laptopBrandId, laptopBrand in enumerate(laptopBrandsAndAmount, start=1):
+            l = (laptopBrandId, laptopBrand, laptopBrandsAndAmount.get(laptopBrand), 25)
+            insertLaptopBrands(connection, l)
+        for lenovoId, lenovoLaptop in enumerate(lenovoLaptops, start=1):
+            l = (lenovoId, lenovoLaptop, lenovoLaptops.get(lenovoLaptop)[0], 1, lenovoLaptops.get(lenovoLaptop)[1])
+            insertLenovoLaptop(connection, l)
+        for asusId, asusLaptop in enumerate(asusLaptops, start=1):
+            a = (asusId, asusLaptop, asusLaptops.get(asusLaptop)[0], 2, asusLaptops.get(asusLaptop)[1])
+            insertAsusLaptop(connection, a)
+        for acerId, acerLaptop in enumerate(acerLaptops, start=1):
+            a = (acerId, acerLaptop, acerLaptops.get(acerLaptop)[0], 3, acerLaptops.get(acerLaptop)[1])
+            insertAcerLaptop(connection, a)
+        for macbookId, macbook in enumerate(macbooks, start=1):
+            m = (macbookId, macbook, macbooks.get(macbook)[0], 4, macbooks.get(macbook)[1])
+            insertAppleLaptop(connection, m)
+        for hpId, hpLaptop in enumerate(hpLaptops, start=1):
+            h = (hpId, hpLaptop, hpLaptops.get(hpLaptop)[0], 5, hpLaptops.get(hpLaptop)[1])
+            insertHpLaptop(connection, h)
+        for dellId, dellLaptop in enumerate(dellLaptops, start=1):
+            d = (dellId, dellLaptop, dellLaptops.get(dellLaptop)[0], 6, dellLaptops.get(dellLaptop)[1])
+            insertDellLaptop(connection, d)
+    
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ ПЛАНШЕТОВ
+    with connection:
+        createTabletBrands(connection)
+        createSamsungTablet(connection)
+        createLenovoTablet(connection)
+        createAppleTablet(connection)
+        createAlcatelTablet(connection)
+        createHuaweiTablet(connection)
+        
     #-----------------------------------------------------------------------------------------------------------------------
 
 
