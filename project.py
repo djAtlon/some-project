@@ -11,8 +11,9 @@ from laptops import createLaptopsBrands, createLenovoLaptop, createAsusLaptop, c
 from laptops import insertLaptopBrands, insertLenovoLaptop, insertAsusLaptop, insertAcerLaptop, insertAppleLaptop, insertHpLaptop, insertDellLaptop
 from laptops import laptopBrandsAndAmount, lenovoLaptops, asusLaptops, acerLaptops, macbooks, hpLaptops, dellLaptops
 from tablet import createTabletBrands, createSamsungTablet, createLenovoTablet, createAppleTablet, createAlcatelTablet, createHuaweiTablet
-from tablet import insertTabletpBrands, insertSamsungTablet, insertLenovoTablet, insertAppleTablet, insertAlcatelTablet, insertHuaweiTablet
+from tablet import insertTabletBrands, insertSamsungTablet, insertLenovoTablet, insertAppleTablet, insertAlcatelTablet, insertHuaweiTablet
 from tablet import tabletBrandsAndStuff, samsungTablets, lenovoTablets, ipads, alcatelTablets, huaweiTablets
+from computer import createComputerProducts, insertComputerProducts, product_names
 
 def returnPrice(helpArr):
     priceArr = []
@@ -226,25 +227,28 @@ def main():
     helpArr = []
     helpArr = soup.find_all('span', class_ = 'amount')
     for item in helpArr:    
-        amount.append(item.text.strip())
-        if len(amount) == 20:
+        if item.text.strip().isdigit():
+            amount.append(int(item.text))
+        if len(amount) == 4:
             break
+    amount.append(10)
+    amount.append(7)
     helpArr = []
-    new_amount = []
-    for a in amount:
-        if a == '103':
-            new_amount.append(int(a))
-        if a == '148':
-            new_amount.append(int(a))
-        if a == '66':
-            new_amount.append(int(a))
-        if a == '26':
-            new_amount.append(int(a))
-        if a == '10':
-            new_amount.append(int(a))
-        if a == '7':
-            new_amount.append(int(a))
-            break
+    # new_amount = []
+    # for a in amount:
+    #     if a == '105':
+    #         new_amount.append(int(a))
+    #     if a == '147':
+    #         new_amount.append(int(a))
+    #     if a == '67':
+    #         new_amount.append(int(a))
+    #     if a == '24':
+    #         new_amount.append(int(a))
+    #     if a == '10':
+    #         new_amount.append(int(a))
+    #     if a == '7':
+    #         new_amount.append(int(a))
+    #         break
     # new_amount.insert(5, 1)
     # # new_amount.remove(1)
     # # new_amount.remove(9)
@@ -253,7 +257,7 @@ def main():
     # print('\n')
     # print(len(phonesBrand), phonesBrand)
     for i in range(0, len(phonesBrand)):
-        phoneBrandAndAmount[phonesBrand[i]] = new_amount[i]
+        phoneBrandAndAmount[phonesBrand[i]] = amount[i]
     # --------------------------------------------------------------------
 
 
@@ -332,6 +336,8 @@ def main():
     soup = bs(response.text, 'lxml')
     helpArr = soup.find_all('a', class_ = 'card__title')
     for item in helpArr:
+        if len(oppoNames) == 24 and len(urlsOppo) == 24:
+            break
         oppoNames.append(item.text.strip())
         urlsOppo.append(item.get('href'))
     helpArr = []
@@ -567,11 +573,31 @@ def main():
         createAppleTablet(connection)
         createAlcatelTablet(connection)
         createHuaweiTablet(connection)
-        
+        for tabletBrandId, tabletBrand in enumerate(tabletBrandsAndStuff, start=1):
+            t = (tabletBrandId, tabletBrand, tabletBrandsAndStuff.get(tabletBrand), 26)
+            insertTabletBrands(connection, t)
+        for samsungId, samsungTablet in enumerate(samsungTablets, start=1):
+            s = (samsungId, samsungTablet, samsungTablets.get(samsungTablet)[0], 1, samsungTablets.get(samsungTablet)[1])
+            insertSamsungTablet(connection, s)
+        for lenovoId, lenovoTablet in enumerate(lenovoTablets, start=1):
+            l = (lenovoId, lenovoTablet, lenovoTablets.get(lenovoTablet)[0], 2, lenovoTablets.get(lenovoTablet)[1])
+            insertLenovoTablet(connection, l)
+        for ipadId, ipad in enumerate(ipads, start=1):
+            i = (ipadId, ipad, ipads.get(ipad)[0], 3, ipads.get(ipad)[1])
+            insertAppleTablet(connection, i)
+        for alcatelId, alcatelName in enumerate(alcatelTablets, start=1):
+            a = (alcatelId, alcatelName, alcatelTablets.get(alcatelName)[0], 4, alcatelTablets.get(alcatelName)[1])
+            insertAlcatelTablet(connection, a)
+        for huaweiId, huaweiName in enumerate(huaweiTablets, start=1):
+            h = (huaweiId, huaweiName, huaweiTablets.get(huaweiName)[0], 5, huaweiTablets.get(huaweiName)[1])
+            insertHuaweiTablet(connection, h)
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ ПРОДУКТОВ КОМПЬЮТЕРНОЙ ПЕРИФЕРИИ
+    with connection:
+        createComputerProducts(connection)
+        for computerProductId, computerProduct in enumerate(product_names, start=1):
+            c = (computerProductId, computerProduct, 28)
+            insertComputerProducts(connection, c)
     #-----------------------------------------------------------------------------------------------------------------------
-
-
-
 
 if __name__ == '__main__':
     main()

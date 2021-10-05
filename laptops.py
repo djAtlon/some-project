@@ -335,8 +335,8 @@ for macbookName in macbookNames:
         macbooks[macbookName].append(macbookPrices[i])
         macbookPrices.remove(macbookPrices[i])
         for j in range(0, len(urlsMacbooks)):
-            macbooks[macbookName].append(urlsMacbooks[j])
-            urlsMacbooks.remove(str(mainUrl + urlsMacbooks[j]))
+            macbooks[macbookName].append(str(mainUrl + urlsMacbooks[j]))
+            urlsMacbooks.remove(urlsMacbooks[j])
             break
         break
 #-----------------------------------------------------------------------------------
@@ -380,8 +380,8 @@ for dellName in dellNames:
     for i in range(0, len(dellLaptopPrices)):
         dellLaptops[dellName].append(dellLaptopPrices[i])
         for j in range(0, len(urlsDell)):
-            dellLaptops[dellName].append(urlsDell[j])
-            urlsDell.remove(str(mainUrl + urlsDell[j]))
+            dellLaptops[dellName].append(str(mainUrl + urlsDell[j]))
+            urlsDell.remove(urlsDell[j])
             break
         break
 #------------------------------------------------------------------------------------
