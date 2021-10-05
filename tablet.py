@@ -21,7 +21,7 @@ def createTabletBrands(conenction):
                             brand_name text UNIQUE NOT NULL,
                             amount int NOT NULL,
                             product_id int NOT NULL,
-                            FOREIGN (product_id) KEY REFERENCES products (id));"""
+                            FOREIGN KEY (product_id) REFERENCES products (id));"""
     try:
         cursor = conenction.cursor()
         cursor.execute(sql_create_table)
@@ -98,7 +98,7 @@ def createAlcatelTablet(connection):
     except Error as error:
         print(error)
 
-def insertTabletpBrands(connection, brand):
+def insertTabletBrands(connection, brand):
     sql_insert_into_table = """INSERT INTO tablet_brands VALUES (?, ?, ?, ?);"""
     try:
         cursor = connection.cursor()
@@ -293,7 +293,7 @@ response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_huawei.htm
 soup = bs(response.text, 'lxml')
 helpArr = soup.find_all('a', class_ = 'card__title')
 for item in helpArr:
-    if len(huaweiNames) == 13 and len(urlsHuawei) == 13:
+    if len(huaweiNames) == 11 and len(urlsHuawei) == 11:
         break
     huaweiNames.append(item.text.strip())
     urlsHuawei.append(item.get('href'))
@@ -315,6 +315,8 @@ for huaweiName in huaweiNames:
             urlsHuawei.remove(urlsHuawei[j])
             break
         break
+# for h in huaweiTablets:
+#     print(h, huaweiTablets.get(h))
 #----------------------------------------------------------------------------------------
 
 # ПЛАНШЕТЫ АЛКАТЕЛЬ
