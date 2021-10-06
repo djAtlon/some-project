@@ -14,6 +14,9 @@ from tablet import createTabletBrands, createSamsungTablet, createLenovoTablet, 
 from tablet import insertTabletBrands, insertSamsungTablet, insertLenovoTablet, insertAppleTablet, insertAlcatelTablet, insertHuaweiTablet
 from tablet import tabletBrandsAndStuff, samsungTablets, lenovoTablets, ipads, alcatelTablets, huaweiTablets
 from computer import createComputerProducts, insertComputerProducts, product_names
+from screen import createTableScreenBrands, createSamsungScreen, createMsiScreen, createAsusScreen, createLgScreen, createDellScreen, createBenqScreen, createAocScreen, createGigabyteScreen, createAcerScreen, createHpScreen, createPhilipsScreen, createLenovoScreen
+from screen import insertScreenBrands, insertSamsungScreen, insertMsiScreen, insertAsusScreen, insertLgScreen, insertDellScreen, insertBenqScreen, insertAocScreen, insertGigabytecreen, insertAcerScreen, insertHpScreen, insertPhilipsScreen, insertLenovoScreen
+from screen import screenBrandsAndAmount, samsungScreens, msiScreens, asusScreens, lgScreens, dellScreens, benqScreens, aocScreens, gigabyteScreens, acerScreens, hpScreens, philipsScreens, lenovoScreens
 
 def returnPrice(helpArr):
     priceArr = []
@@ -336,7 +339,7 @@ def main():
     soup = bs(response.text, 'lxml')
     helpArr = soup.find_all('a', class_ = 'card__title')
     for item in helpArr:
-        if len(oppoNames) == 24 and len(urlsOppo) == 24:
+        if len(oppoNames) == 23 and len(urlsOppo) == 23:
             break
         oppoNames.append(item.text.strip())
         urlsOppo.append(item.get('href'))
@@ -406,13 +409,6 @@ def main():
                 break
             break
     #--------------------------------------------------------------------------------------------------
-    
-    
-
-
-
-
-
 
     # ТЕЛЕФОНЫ ВАНПЛЮС
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_oneplus_smartfon.html')
@@ -597,6 +593,61 @@ def main():
         for computerProductId, computerProduct in enumerate(product_names, start=1):
             c = (computerProductId, computerProduct, 28)
             insertComputerProducts(connection, c)
+    
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ БРЕНДОВ МОНИТОРОВ
+    with connection:
+        createTableScreenBrands(connection)
+        createSamsungScreen(connection)
+        createMsiScreen(connection)
+        createAsusScreen(connection)
+        createLgScreen(connection)
+        createDellScreen(connection)
+        createBenqScreen(connection)
+        createAocScreen(connection)
+        createGigabyteScreen(connection)
+        createAcerScreen(connection)
+        createHpScreen(connection)
+        createPhilipsScreen(connection)
+        createLenovoScreen(connection)
+        for screenBrandId, screenBrand in enumerate(screenBrandsAndAmount, start=1):
+            s = (screenBrandId, screenBrand, screenBrandsAndAmount.get(screenBrand))
+            insertScreenBrands(connection, s)
+        for samsungScreenId, samsungScreen in enumerate(samsungScreens, start=1):
+            s = (samsungScreenId, samsungScreen, samsungScreens.get(samsungScreen)[0], samsungScreens.get(samsungScreen)[1])
+            insertSamsungScreen(connection, s)
+        for msiId, msi in enumerate(msiScreens, start=1):
+            m = (msiId, msi, msiScreens.get(msi)[0], msiScreens.get(msi)[1])
+            insertMsiScreen(connection, m)
+        for asusId, asus in enumerate(asusScreens, start=1):
+            a = (asusId, asus, asusScreens.get(asus)[0], asusScreens.get(asus)[1])
+            insertAsusScreen(connection, a)
+        for lgId, lg in enumerate(lgScreens, start=1):
+            l = (lgId, lg, lgScreens.get(lg)[0], lgScreens.get(lg)[1])
+            insertLgScreen(connection, l)
+        for dellId, dell in enumerate(dellScreens, start=1):
+            d = (dellId, dell, dellScreens.get(dell)[0], dellScreens.get(dell)[1])
+            insertDellScreen(connection, d)
+        for benqId, benq in enumerate(benqScreens, start=1):
+            b = (benqId, benq, benqScreens.get(benq)[0], benqScreens.get(benq)[1])
+            insertBenqScreen(connection, b)
+        for aocId, aoc in enumerate(aocScreens, start=1):
+            a = (aocId, aoc, aocScreens.get(aoc)[0], aocScreens.get(aoc)[1])
+            insertAocScreen(connection, a)
+        for gigabyteId, gigabyte in enumerate(gigabyteScreens, start=1):
+            g = (gigabyteId, gigabyte, gigabyteScreens.get(gigabyte)[0], gigabyteScreens.get(gigabyte)[1])
+            insertGigabytecreen(connection, g)
+        for acerId, acer in enumerate(acerScreens, start=1):
+            a = (acerId, acer, acerScreens.get(acer)[0], acerScreens.get(acer)[1])
+            insertAcerScreen(connection, a)
+        for hpId, hp in enumerate(hpScreens, start=1):
+            h = (hpId, hp, hpScreens.get(hp)[0], hpScreens.get(hp)[1])
+            insertHpScreen(connection, h)
+        for philipsId, philips in enumerate(philipsScreens, start=1):
+            p = (philipsId, philips, philipsScreens.get(philips)[0], philipsScreens.get(philips)[1])
+            insertPhilipsScreen(connection, p)
+        for lenovoId, lenovo in enumerate(lenovoScreens, start=1):
+            l = (lenovoId, lenovo, lenovoScreens.get(lenovo)[0], lenovoScreens.get(lenovo)[1])
+            insertLenovoScreen(connection, l)
     #-----------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
