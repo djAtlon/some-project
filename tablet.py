@@ -158,28 +158,23 @@ amount = []
 tabletBrands = []
 tabletBrandsAndStuff = {}
 
-samsungNames = []
-urlsSamsung = []
+samsungNamesAndUrl = []
 samsungTablets = {}
 samsungTabletPrices = []
 
-lenovoNames = []
-urlsLenovo = []
+lenovoNamesAndUrl = []
 lenovoTablets = {}
 lenovoTabletPrices = []
 
-ipadNames = []
-urlsIpad = []
+ipadNamesAndUrl = []
 ipads = {}
 ipadPrices = []
 
-huaweiNames = []
-urlsHuawei = []
+huaweiNamesAndUrl = []
 huaweiTablets = {}
 huaweiTabletsPrices = []
 
-alcatelNames = []
-urlsAlcatel = []
+alcatelNamesAndUrl = []
 alcatelTablets = {}
 alcatelPrices = []
 
@@ -205,145 +200,44 @@ for i in range(0, len(tabletBrands)):
 # ПЛАНШЕТЫ САМСУНГ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_samsung.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(samsungNames) == 20 and len(urlsSamsung) == 20:
-        break
-    samsungNames.append(item.text.strip())
-    urlsSamsung.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-samsungTabletPrices = returnPrice(helpArr)
-count = 0
-while count != 8:
-    samsungTabletPrices.pop(-1)
-    count += 1
-helpArr = []
-for sammsungName in samsungNames:
-    samsungTablets[sammsungName] = []
-    for i in range(0, len(samsungTabletPrices)):
-        samsungTablets[sammsungName].append(samsungTabletPrices[i])
-        samsungTabletPrices.remove(samsungTabletPrices[i])
-        for j in range(0, len(urlsSamsung)):
-            samsungTablets[sammsungName].append(str(mainUrl + urlsSamsung[j]))
-            urlsSamsung.remove(urlsSamsung[j])
-            break
-        break
+samsungNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+samsungTabletPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 25):
+    samsungTablets[samsungNamesAndUrl[i].text.strip()] = [int(samsungTabletPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + samsungNamesAndUrl[i].get('href'))]
 #------------------------------------------------------------------------------------
 
 # ПЛАНШЕТЫ ЛЕНОВО
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_lenovo.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(lenovoNames) == 26 and len(urlsLenovo) == 26:
-        break
-    lenovoNames.append(item.text.strip())
-    urlsLenovo.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-lenovoTabletPrices = returnPrice(helpArr)
-count = 0
-while count != 8:
-    lenovoTabletPrices.pop(-1)
-    count += 1
-for lenovoName in lenovoNames:
-    lenovoTablets[lenovoName] = []
-    for i in range(0, len(lenovoTabletPrices)):
-        lenovoTablets[lenovoName].append(lenovoTabletPrices[i])
-        lenovoTabletPrices.remove(lenovoTabletPrices[i])
-        for j in range(0, len(urlsLenovo)):
-            lenovoTablets[lenovoName].append(str(mainUrl + urlsLenovo[j]))
-            urlsLenovo.remove(urlsLenovo[j])
-            break
-        break
+lenovoNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+lenovoTabletPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    lenovoTablets[lenovoNamesAndUrl[i].text.strip()] = [int(lenovoTabletPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + lenovoNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------
 
 # ПЛАНШЕТЫ ЭПЛ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_apple.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(ipadNames) == 26 and len(urlsIpad) == 26:
-        break
-    ipadNames.append(item.text.strip())
-    urlsIpad.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-ipadPrices = returnPrice(helpArr)
-count = 0
-while count != 8:
-    ipadPrices.pop(-1)
-    count += 1
-helpArr = []
-for ipadName in ipadNames:
-    ipads[ipadName] = []
-    for i in range(0, len(ipadPrices)):
-        ipads[ipadName].append(ipadPrices[i])
-        ipadPrices.remove(ipadPrices[i])
-        for j in range(0, len(urlsIpad)):
-            ipads[ipadName].append(str(mainUrl + urlsIpad[j]))
-            urlsIpad.remove(urlsIpad[j])
-            break
-        break
+ipadNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+ipadPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    ipads[ipadNamesAndUrl[i].text.strip()] = [int(ipadPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + ipadNamesAndUrl[i].get('href'))]
 #---------------------------------------------------------------------------------
 
 # ПЛАНШЕТЫ ХУАВЕЙ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_huawei.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(huaweiNames) == 11 and len(urlsHuawei) == 11:
-        break
-    huaweiNames.append(item.text.strip())
-    urlsHuawei.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-huaweiTabletsPrices = returnPrice(helpArr)
-count = 0
-while count != 5:
-    huaweiTabletsPrices.pop(-1)
-    count += 1
-helpArr = []
-for huaweiName in huaweiNames:
-    huaweiTablets[huaweiName] = []
-    for i in range(0, len(huaweiTabletsPrices)):
-        huaweiTablets[huaweiName].append(huaweiTabletsPrices[i])
-        huaweiTabletsPrices.remove(huaweiTabletsPrices[i])
-        for j in range(0, len(urlsHuawei)):
-            huaweiTablets[huaweiName].append(str(mainUrl + urlsHuawei[j]))
-            urlsHuawei.remove(urlsHuawei[j])
-            break
-        break
-# for h in huaweiTablets:
-#     print(h, huaweiTablets.get(h))
+huaweiNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+huaweiTabletsPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 11):
+    huaweiTablets[huaweiNamesAndUrl[i].text.strip()] = [int(huaweiTabletsPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + huaweiNamesAndUrl[i].get('href'))]
 #----------------------------------------------------------------------------------------
 
 # ПЛАНШЕТЫ АЛКАТЕЛЬ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/planshety_alcatel.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(alcatelNames) == 9 and len(urlsAlcatel) == 9:
-        break
-    alcatelNames.append(item.text.strip())
-    urlsAlcatel.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-alcatelPrices = returnPrice(helpArr)
-count = 0
-while count != 4:
-    alcatelPrices.pop(-1)
-    count += 1
-helpArr = []
-for alcatelName in alcatelNames:
-    alcatelTablets[alcatelName] = []
-    for i in range(0, len(alcatelPrices)):
-        alcatelTablets[alcatelName].append(alcatelPrices[i])
-        alcatelPrices.remove(alcatelPrices[i])
-        for j in range(0, len(urlsAlcatel)):
-            alcatelTablets[alcatelName].append(str(mainUrl + urlsAlcatel[j]))
-            urlsAlcatel.remove(urlsAlcatel[j])
-            break
-        break
+alcatelNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+alcatelPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 9):
+    alcatelTablets[alcatelNamesAndUrl[i].text.strip()] = [int(alcatelPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + alcatelNamesAndUrl[i].get('href'))]
 #-------------------------------------------------------------------------------------

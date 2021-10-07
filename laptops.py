@@ -185,33 +185,27 @@ amount = []
 laptopBrands = []
 laptopBrandsAndAmount = {}
 
-lenovoNames = []
-urlsLenovo = []
+lenovoNamesAndUrl = []
 lenovoLaptops = {}
 lenovoLaptopPrices = []
 
-asusNames = []
-urlsAsus = []
+asusNamesAndUrl = []
 asusLaptops = {}
 asusLaptopPrices = []
 
-acerNames = []
-urlsAcer = []
+acerNamesAndUrl = []
 acerLaptops = {}
 acerLaptopPrices = []
 
-macbookNames = []
-urlsMacbooks = []
+macbookNamesAndUrl = []
 macbooks = {}
 macbookPrices = []
 
-hpNames = []
-urlsHp = []
+hpNamesAndUrl = []
 hpLaptops = {}
 hpLaptopPrices = []
 
-dellNames = []
-urlsDell = []
+dellNamesAndUrl = []
 dellLaptops = {}
 dellLaptopPrices = []
 
@@ -248,140 +242,53 @@ for i in range(0, len(laptopBrands)):
 # НОУТБУКИ ЛЕНОВО
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_lenovo.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    lenovoNames.append(item.text.strip())
-    urlsLenovo.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-lenovoLaptopPrices = returnPrice(helpArr)
-helpArr = []
-for lenovoName in lenovoNames:
-
-    lenovoLaptops[lenovoName] = []
-    for i in range(0, len(lenovoLaptopPrices)):
-        lenovoLaptops[lenovoName].append(lenovoLaptopPrices[i])
-        lenovoLaptopPrices.remove(lenovoLaptopPrices[i])
-        for j in range(0, len(urlsLenovo)):
-            lenovoLaptops[lenovoName].append(str(mainUrl + urlsLenovo[j]))
-            urlsLenovo.remove(urlsLenovo[j])
-            break
-        break
+lenovoNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+lenovoLaptopPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    lenovoLaptops[lenovoNamesAndUrl[i].text.strip()] = [int(lenovoLaptopPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + lenovoNamesAndUrl[i].get('href'))]
 #----------------------------------------------------------------------------------
 
 # НОУТБУКИ АСУС
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_asus.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    asusNames.append(item.text.strip())
-    urlsAsus.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-asusLaptopPrices = returnPrice(helpArr)
-helpArr = []
-for asusName in asusNames:
-    asusLaptops[asusName] = []
-    for i in range(0, len(asusLaptopPrices)):
-        asusLaptops[asusName].append(asusLaptopPrices[i])
-        asusLaptopPrices.remove(asusLaptopPrices[i])
-        for j in range(0, len(urlsAsus)):
-            asusLaptops[asusName].append(str(mainUrl + urlsAsus[j]))
-            urlsAsus.remove(urlsAsus[j])
-            break
-        break
+asusNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+asusLaptopPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    asusLaptops[asusNamesAndUrl[i].text.strip()] = [int(asusLaptopPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + asusNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------
-
 
 # НОУТБУКИ ЭЙСЕР
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_acer.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    acerNames.append(item.text.strip())
-    urlsAcer.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-acerLaptopPrices = returnPrice(helpArr)
-helpArr = []
-for acerName in acerNames:
-    acerLaptops[acerName] = []
-    for i in range(0, len(acerLaptopPrices)):
-        acerLaptops[acerName].append(acerLaptopPrices[i])
-        acerLaptopPrices.remove(acerLaptopPrices[i])
-        for j in range(0, len(urlsAcer)):
-            acerLaptops[acerName].append(str(mainUrl + urlsAcer[j]))
-            urlsAcer.remove(urlsAcer[j])
-            break
-        break
+acerNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+acerLaptopPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    acerLaptops[acerNamesAndUrl[i].text.strip()] = [int(acerLaptopPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + acerNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------
 
 # МАКБУКИ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_apple.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(macbookNames) == 21 and len(urlsMacbooks) == 21:
-        break
-    macbookNames.append(item.text.strip())
-    urlsMacbooks.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-macbookPrices = returnPrice(helpArr)
-helpArr = []
-for macbookName in macbookNames:
-    macbooks[macbookName] = []
-    for i in range(0, len(macbookPrices)):
-        macbooks[macbookName].append(macbookPrices[i])
-        macbookPrices.remove(macbookPrices[i])
-        for j in range(0, len(urlsMacbooks)):
-            macbooks[macbookName].append(str(mainUrl + urlsMacbooks[j]))
-            urlsMacbooks.remove(urlsMacbooks[j])
-            break
-        break
+macbookNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+macbookPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 21):
+    macbooks[macbookNamesAndUrl[i].text.strip()] = [int(macbookPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + macbookNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------
 
 # НОУТБУКИ АШПИ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_hp.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    hpNames.append(item.text.strip())
-    urlsHp.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-hpLaptopPrices = returnPrice(helpArr)
-helpArr = []
-for hpName in hpNames:
-    hpLaptops[hpName] = []
-    for i in range(0, len(hpLaptopPrices)):
-        hpLaptops[hpName].append(hpLaptopPrices[i])
-        hpLaptopPrices.remove(hpLaptopPrices[i])
-        for j in range(0, len(urlsHp)):
-            hpLaptops[hpName].append(str(mainUrl + urlsHp[j]))
-            urlsHp.remove(urlsHp[j])
-            break
-        break
+hpNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+hpLaptopPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    hpLaptops[hpNamesAndUrl[i].text.strip()] = [int(hpLaptopPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + hpNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------
 
 # НОУТБУКИ ДЕЛЛ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/noutbuki_dell.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    dellNames.append(item.text.strip())
-    urlsDell.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-dellLaptopPrices = returnPrice(helpArr)
-helpArr = []
-for dellName in dellNames:
-    dellLaptops[dellName] = []
-    for i in range(0, len(dellLaptopPrices)):
-        dellLaptops[dellName].append(dellLaptopPrices[i])
-        for j in range(0, len(urlsDell)):
-            dellLaptops[dellName].append(str(mainUrl + urlsDell[j]))
-            urlsDell.remove(urlsDell[j])
-            break
-        break
-#------------------------------------------------------------------------------------
+dellNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+dellLaptopPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    dellLaptops[dellNamesAndUrl[i].text.strip()] = [int(dellLaptopPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + dellNamesAndUrl[i].get('href'))]
+#---------------------------------------------------------------------

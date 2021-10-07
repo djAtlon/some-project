@@ -494,7 +494,7 @@ response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_dell.htm
 soup = bs(response.text, 'lxml')
 helpArr = soup.find_all('a', class_= 'card__title')
 for item in helpArr:
-    if len(dellNames) == 24 and len(urlsDell) == 24:
+    if len(dellNames) == 22 and len(urlsDell) == 22:
         break
     dellNames.append(item.text.strip())
     urlsDell.append(item.get('href'))
@@ -679,7 +679,7 @@ for philipsName in philipsNames:
             urlsPhilips.remove(urlsPhilips[j])
             break
         break
-#------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------
 
 # МОНИТОРЫ ЛЕНОВО
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_lenovo.html')

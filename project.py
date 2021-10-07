@@ -18,7 +18,7 @@ from screen import createTableScreenBrands, createSamsungScreen, createMsiScreen
 from screen import insertScreenBrands, insertSamsungScreen, insertMsiScreen, insertAsusScreen, insertLgScreen, insertDellScreen, insertBenqScreen, insertAocScreen, insertGigabytecreen, insertAcerScreen, insertHpScreen, insertPhilipsScreen, insertLenovoScreen
 from screen import screenBrandsAndAmount, samsungScreens, msiScreens, asusScreens, lgScreens, dellScreens, benqScreens, aocScreens, gigabyteScreens, acerScreens, hpScreens, philipsScreens, lenovoScreens
 
-def returnPrice(helpArr):
+def getPrice(helpArr):
     priceArr = []
     for item in helpArr:
         price = item.text.strip()
@@ -108,11 +108,9 @@ def insertPhonesBrand(connection, phoneBrand):
         print(error)
 
 
-
 def getResponse(url):
     response = requests.get(url)
     return response
-
 
 
 
@@ -234,7 +232,8 @@ def main():
             amount.append(int(item.text))
         if len(amount) == 4:
             break
-    amount.append(10)
+    amount.append(11)
+    amount.append(1)
     amount.append(7)
     helpArr = []
     # new_amount = []
@@ -273,7 +272,7 @@ def main():
         urlsSamsungPhones.append(item.get('href'))
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    samsungPhonesPrices = returnPrice(helpArr)
+    samsungPhonesPrices = getPrice(helpArr)
     helpArr = []
     for nameSamgungPhone in namesSamsungPhones:
         samsungPhones[nameSamgungPhone] = []
@@ -297,7 +296,7 @@ def main():
         urlsIphones.append(item.get('href'))
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    iphonesPrice = returnPrice(helpArr)
+    iphonesPrice = getPrice(helpArr)
     helpArr = []
     for iphoneName in namesIphones:
         iphones[iphoneName] = []
@@ -320,7 +319,7 @@ def main():
         urlsXiaomi.append(item.get('href'))
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    xiaomiPhonesPrice = returnPrice(helpArr)
+    xiaomiPhonesPrice = getPrice(helpArr)
     helpArr = []
     for xiaomiName in xiaomiNames:
         xiaomiPhones[xiaomiName] = []
@@ -345,7 +344,7 @@ def main():
         urlsOppo.append(item.get('href'))
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    oppoPhonesPrice = returnPrice(helpArr)
+    oppoPhonesPrice = getPrice(helpArr)
     helpArr = []
     for oppoName in oppoNames:
         oppoPhones[oppoName] = []
@@ -372,7 +371,7 @@ def main():
             break
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    huaweiPhonesPrice = returnPrice(helpArr)
+    huaweiPhonesPrice = getPrice(helpArr)
     helpArr = []
     for huaweiName in huaweiNames:
         huaweiPhones[huaweiName] = []
@@ -384,7 +383,6 @@ def main():
                 urlsHuawei.remove(urlsHuawei[j])
                 break
             break
-    
     #--------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ МЕЙЗУ
@@ -398,7 +396,7 @@ def main():
             break
     helpArr = []
     helpArr = soup.find_all('div', class_ = 'card-price')
-    meizuPhonesPrice = returnPrice(helpArr)
+    meizuPhonesPrice = getPrice(helpArr)
     helpArr = []
     for meizuName in meizuNames:
         meizuPhones[meizuName] = []
@@ -419,7 +417,7 @@ def main():
         urlsOneplus.append(item.get('href'))
     helpArr = []
     helpArr = soup.find_all('div', 'card-price')
-    oneplusPhonesPrice = returnPrice(helpArr)
+    oneplusPhonesPrice = getPrice(helpArr)
     for oneplusName in oneplusNames:
         oneplusPhones[oneplusName] = []
         for i in range(0, len(oneplusPhonesPrice)):
@@ -431,8 +429,6 @@ def main():
                 break
             break
     # ---------------------------------------------------------------------------------------------------
-
-
 
 
     with connection:
