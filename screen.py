@@ -1,12 +1,10 @@
-from sqlite3.dbapi2 import connect
 import requests
 import sqlite3
 from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
 
-from project import main
 
-def returnPrice(helpArr):
+def getPrice(helpArr):
     priceArr = []
     for item in helpArr:
         price = item.text.strip()
@@ -19,7 +17,7 @@ def returnPrice(helpArr):
 def createTableScreenBrands(connection):
     sql_create_table = """CREATE TABLE IF NOT EXISTS screen_brands(
                             id int PRIMARY KEY NOT NULL,
-                            brand_name text UNIQUE NOT NULL, 
+                            brand_name text UNIQUE NOT NULL,
                             amount int NOT NULL);"""
     try:
         cursor = connection.cursor()
@@ -27,11 +25,263 @@ def createTableScreenBrands(connection):
     except Error as error:
         print(error)
 
+def createSamsungScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS samsung_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createMsiScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS msi_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createAsusScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS asus_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createLgScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS lg_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createDellScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS dell_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createBenqScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS benq_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createAocScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS aoc_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createGigabyteScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS gigabyte_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createAcerScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS acer_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createHpScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS hp_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createPhilipsScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS philips_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def createLenovoScreen(connection):
+    sql_create_table = """CREATE TABLE IF NOT EXISTS lenovo_screen(
+                            id int PRIMARY KEY NOT NULL,
+                            screen_model text UNIQUE NOT NULL,
+                            price int NOT NULL,
+                            link text UNIQUE NOT NULL);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_create_table)
+    except Error as error:
+        print(error)
+
+def insertSamsungScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO samsung_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertMsiScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO msi_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertAsusScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO asus_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertLgScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO lg_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertDellScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO dell_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertBenqScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO benq_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertAocScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO aoc_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertGigabytecreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO gigabyte_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertAcerScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO acer_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertHpScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO hp_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertPhilipsScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO philips_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
+def insertLenovoScreen(connection, screen):
+    sql_insert_into_table = """INSERT INTO lenovo_screen VALUES (?, ?, ?, ?);"""
+    try:
+        cursor = connection.cursor()
+        cursor.execute(sql_insert_into_table, screen)
+        connection.commit()
+    except Error as error:
+        print(error)
+
 def insertScreenBrands(connection, brand):
     sql_insert_into_table = """INSERT INTO screen_brands VALUES(?, ?, ?);"""
     try:
         cursor = connection.cursor()
-        cursor.execute(sql_insert_into_table)
+        cursor.execute(sql_insert_into_table, brand)
         connection.commit()
     except Error as error:
         print(error)
@@ -134,7 +384,7 @@ for item in helpArr:
     urlsSamsung.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-samsungPrices = returnPrice(helpArr)
+samsungPrices = getPrice(helpArr)
 count = 0
 while count != 8:
     samsungPrices.pop(-1)
@@ -163,9 +413,9 @@ for item in helpArr:
     urlsMsi.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-msiPrices = returnPrice(helpArr)
+msiPrices = getPrice(helpArr)
 count = 0
-while count != 6:
+while count != 5:
     msiPrices.pop(-1)
     count += 1
 helpArr = []
@@ -186,13 +436,13 @@ response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_asus.htm
 soup = bs(response.text, 'lxml')
 helpArr = soup.find_all('a', class_= 'card__title')
 for item in helpArr:
-    if len(msiNames) == 26 and len(urlsMsi) == 26:
+    if len(asusNames) == 26 and len(urlsAsus) == 26:
         break
     asusNames.append(item.text.strip())
     urlsAsus.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-asusPrices = returnPrice(helpArr)
+asusPrices = getPrice(helpArr)
 count = 0
 while count != 4:
     asusPrices.pop(-1)
@@ -203,10 +453,10 @@ for asusName in asusNames:
     for i in range(0, len(asusPrices)):
         asusScreens[asusName].append(asusPrices[i])
         asusPrices.remove(asusPrices[i])
-        for j in range(0, len(urlsAsus)):
-            asusScreens[asusName].append(str(mainUrl + urlsAsus[j]))
-            urlsAsus.remove(urlsAsus[j])
-            break
+        break
+    for j in range(0, len(urlsAsus)):
+        asusScreens[asusName].append(str(mainUrl + urlsAsus[j]))
+        urlsAsus.remove(urlsAsus[j])
         break
 #-------------------------------------------------------------------------------
 
@@ -221,7 +471,7 @@ for item in helpArr:
     urlsLg.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-lgPrices = returnPrice(helpArr)
+lgPrices = getPrice(helpArr)
 count = 0
 while count != 8:
     lgPrices.pop(-1)
@@ -233,7 +483,7 @@ for lgName in lgNames:
         lgScreens[lgName].append(lgPrices[i])
         lgPrices.remove(lgPrices[i])
         for j in range(0, len(urlsLg)):
-            lgScreens[lgName].append(urlsLg[j])
+            lgScreens[lgName].append(str(mainUrl + urlsLg[j]))
             urlsLg.remove(urlsLg[j])
             break
         break
@@ -250,7 +500,7 @@ for item in helpArr:
     urlsDell.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-dellPrices = returnPrice(helpArr)
+dellPrices = getPrice(helpArr)
 count = 0
 while count != 8:
     dellPrices.pop(-1)
@@ -262,7 +512,7 @@ for dellName in dellNames:
         dellScreens[dellName].append(dellPrices[i])
         dellPrices.remove(dellPrices[i])
         for j in range(0, len(urlsDell)):
-            dellScreens[dellName].append(urlsDell[j])
+            dellScreens[dellName].append(str(mainUrl + urlsDell[j]))
             urlsDell.remove(urlsDell[j])
             break
         break
@@ -279,7 +529,7 @@ for item in helpArr:
     urlsBenq.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-benqPrices = returnPrice(helpArr)
+benqPrices = getPrice(helpArr)
 count = 0
 while count != 8:
     benqPrices.pop(-1)
@@ -291,7 +541,7 @@ for benqName in benqNames:
         benqScreens[benqName].append(benqPrices[i])
         benqPrices.remove(benqPrices[i])
         for j in range(0, len(urlsBenq)):
-            benqScreens[benqName].append(urlsBenq[j])
+            benqScreens[benqName].append(str(mainUrl + urlsBenq[j]))
             urlsBenq.remove(urlsBenq[j])
             break
         break
@@ -308,7 +558,7 @@ for item in helpArr:
     urlsAoc.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-aocPrices = returnPrice(helpArr)
+aocPrices = getPrice(helpArr)
 count = 0
 while count != 4:
     aocPrices.pop(-1)
@@ -320,7 +570,7 @@ for aocName in aocNames:
         aocScreens[aocName].append(aocPrices[i])
         aocPrices.remove(aocPrices[i])
         for j in range(0, len(urlsAoc)):
-            aocScreens[aocName].append(urlsAoc[j])
+            aocScreens[aocName].append(str(mainUrl + urlsAoc[j]))
             urlsAoc.remove(urlsAoc[j])
             break
         break
@@ -331,15 +581,15 @@ response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_gigabyte
 soup = bs(response.text, 'lxml')
 helpArr = soup.find_all('a', class_= 'card__title')
 for item in helpArr:
-    if len(gigabyteNames) == 15 and len(urlsGigabyte) == 15:
+    if len(gigabyteNames) == 14 and len(urlsGigabyte) == 14:
         break
     gigabyteNames.append(item.text.strip())
     urlsGigabyte.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-gigabytePrices = returnPrice(helpArr)
+gigabytePrices = getPrice(helpArr)
 count = 0
-while count != 8:
+while count != 7:
     gigabytePrices.pop(-1)
     count += 1
 helpArr = []
@@ -349,7 +599,7 @@ for gigabyteName in gigabyteNames:
         gigabyteScreens[gigabyteName].append(gigabytePrices[i])
         gigabytePrices.remove(gigabytePrices[i])
         for j in range(0, len(urlsGigabyte)):
-            gigabyteScreens[gigabyteName].append(urlsGigabyte[j])
+            gigabyteScreens[gigabyteName].append(str(mainUrl + urlsGigabyte[j]))
             urlsGigabyte.remove(urlsGigabyte[j])
             break
         break
@@ -359,30 +609,19 @@ for gigabyteName in gigabyteNames:
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_acer.html')
 soup = bs(response.text, 'lxml')
 helpArr = soup.find_all('a', class_= 'card__title')
-for item in helpArr:
-    if len(acerNames) == 26 and (urlsAcer) == 26:
-        break
-    acerNames.append(item.text.strip())
-    urlsAcer.append(item.get('href'))
-helpArr = []
-helpArr = soup.find_all('div', class_ = 'card-price')
-acerPrices = returnPrice(helpArr)
-count = 0
+price = soup.find_all('div', class_ = 'card-price')
+index = 0
+acerPrices = getPrice(price)
 while count != 8:
     acerPrices.pop(-1)
     count += 1
-helpArr = []
-for acerName in acerNames:
-    acerScreens[acerName] = []
-    for i in range(0, len(acerPrices)):
-        acerScreens[acerName].append(acerPrices[i])
-        acerPrices.remove(acerPrices[i])
-        for j in range(0, len(urlsAcer)):
-            acerScreens[acerName].append(urlsAcer[j])
-            urlsAcer.remove(urlsAcer[j])
-            break
+for item in helpArr:
+    acerScreens[item.text.strip()] = [acerPrices[index], str(mainUrl + item.get('href'))]
+    index += 1
+    if index == len(acerPrices):
         break
-#--------------------------------------------------------------------------------
+helpArr = []
+# --------------------------------------------------------------------------------
 
 # МОНИТОРЫ АШПИ
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_hp.html')
@@ -395,7 +634,7 @@ for item in helpArr:
     urlsHp.append(item.get('href'))
 helpArr = []
 helpArr = soup.find_all('div', class_ = 'card-price')
-hpPrices = returnPrice(helpArr)
+hpPrices = getPrice(helpArr)
 count = 0
 while count != 8:
     hpPrices.pop(-1)
@@ -403,6 +642,58 @@ while count != 8:
 helpArr = []
 for hpName in hpNames:
     hpScreens[hpName] = []
+    for i in range(0, len(hpPrices)):
+        hpScreens[hpName].append(hpPrices[i])
+        hpPrices.remove(hpPrices[i])
+        for j in range(0, len(urlsHp)):
+            hpScreens[hpName].append(str(mainUrl + urlsHp[j]))
+            urlsHp.remove(urlsHp[j])
+            break
+        break
+# ----------------------------------------------------------------------------------
+
 # МОНИТОРЫ ФИЛИПС
+response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_philips.html')
+soup = bs(response.text, 'lxml')
+helpArr = soup.find_all('a', class_= 'card__title')
+for item in helpArr:
+    if len(philipsNames) == 26 and len(urlsPhilips) == 26:
+        break
+    philipsNames.append(item.text.strip())
+    urlsPhilips.append(item.get('href'))
+helpArr = []
+helpArr = soup.find_all('div', class_ = 'card-price')
+philipsPrices = getPrice(helpArr)
+count = 0
+while count != 7:
+    philipsPrices.pop(-1)
+    count += 1
+helpArr = []
+for philipsName in philipsNames:
+    philipsScreens[philipsName] = []
+    for i in range(0, len(philipsPrices)):
+        philipsScreens[philipsName].append(philipsPrices[i])
+        philipsPrices.remove(philipsPrices[i])
+        for j in range(0, len(urlsPhilips)):
+            philipsScreens[philipsName].append(str(mainUrl + urlsPhilips[j]))
+            urlsPhilips.remove(urlsPhilips[j])
+            break
+        break
+#------------------------------------------------------------------------------------
 
 # МОНИТОРЫ ЛЕНОВО
+response = requests.get('https://www.foxtrot.com.ua/ru/shop/gk-monitory_lenovo.html')
+soup = bs(response.text, 'lxml')
+helpArr = soup.find_all('a', class_= 'card__title')
+idnex = 0
+count = 0
+price = soup.find_all('div', class_ = 'card-price')
+lenovoPrices = getPrice(price)
+while count != 8:
+    lenovoPrices.pop(-1)
+    count += 1
+for i in range(0, len(lenovoPrices)):
+    if i == 26:
+        break
+    lenovoScreens[helpArr[i].text.strip()] = [lenovoPrices[i], (str(mainUrl + helpArr[i].get('href')))]
+#---------------------------------------------------------------------------------------
