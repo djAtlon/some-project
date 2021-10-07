@@ -1,4 +1,5 @@
 #5
+from sqlite3.dbapi2 import SQLITE_DROP_VIEW
 import requests
 import sqlite3
 from sqlite3 import Error
@@ -190,33 +191,27 @@ amount = []
 tvBrands = []
 tvBrandsAndStuff = {}
 
-samsungNames = []
-urlsSamsung = []
+samsungNamesAndUrl = []
 samsungTvs = {}
 samsungPrices = []
 
-lgNames = []
-urlsLg = []
+lgNamesAndUrl = []
 lgTvs = {}
 lgPrices = []
 
-xiaomiNames = []
-urlsXiaomi = []
+xiaomiNamesAndUrl = []
 xiaomiTvs = {}
 xiaomiPrices = []
 
-sonyNames = []
-urlsSony = []
+sonyNamesAndUrl = []
 sonyTvs = {}
 sonyPrices = []
 
-philipsNames = []
-urlsPhilips = []
+philipsNamesAndUrl = []
 philipsTvs = {}
 philipsPrices = []
 
-toshibaNames = []
-urlsToshiba = []
+toshibaNamesAndUrl = []
 toshibaTvs = {}
 toshibaPrices = []
 
@@ -242,15 +237,15 @@ for item in helpArr:
     if item.text.strip().isdigit():
         if len(amount) == 5:
             break
-        if item.text.strip() == '99':
+        if item.text.strip() == '96':
             amount.append(int(item.text))
-        elif item.text.strip() == '68':
+        elif item.text.strip() == '66':
             amount.append(int(item.text))
         elif item.text.strip() == '3':
             amount.append(int(item.text))
         elif item.text.strip() == '43':
             amount.append(int(item.text))
-        elif item.text.strip() == '31':
+        elif item.text.strip() == '30':
             amount.append(int(item.text))
 
 amount.append(11)
@@ -263,147 +258,53 @@ helpArr = []
 # TV SAMSUNG
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_samsung.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    samsungNames.append(item.text.strip())
-    urlsSamsung.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-samsungPrices = returnPrice(helpArr)
-helpArr = []
-for samsungName in samsungNames:
-    samsungTvs[samsungName] = []
-    for i in range(0, len(samsungPrices)):
-        samsungTvs[samsungName].append(samsungPrices[i])
-        samsungPrices.remove(samsungPrices[i])
-        for j in range(0, len(urlsSamsung)):
-            samsungTvs[samsungName].append(str(mainUrl + urlsSamsung[j]))
-            urlsSamsung.remove(urlsSamsung[j])
-            break
-        break
+samsungNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+samsungPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    samsungTvs[samsungNamesAndUrl[i].text.strip()] = [samsungPrices[i].text.strip().replace(' ', '').split('₴')[0], str(mainUrl + samsungNamesAndUrl[i].get('href'))]
 #---------------------------------------------------------------------------------------
 
 # TV LG
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_lg.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    lgNames.append(item.text.strip())
-    urlsLg.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-lgPrices = returnPrice(helpArr)
-helpArr = []
-for lgName in lgNames:
-    lgTvs[lgName] = []
-    for i in range(0, len(lgPrices)):
-        lgTvs[lgName].append(lgPrices[i])
-        lgPrices.remove(lgPrices[i])
-        for j in range(0, len(urlsLg)):
-            lgTvs[lgName].append(str(mainUrl + urlsLg[j]))
-            urlsLg.remove(urlsLg[j])
-            break
-        break
+lgNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+lgPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    lgTvs[lgNamesAndUrl[i].text.strip()] = [int(lgPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + lgNamesAndUrl[i].get('href'))]
 #----------------------------------------------------------------------------------------
 
 # TV XIAOMI
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_xiaomi.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(xiaomiNames) == 3 and len(urlsXiaomi) == 3:
-        break
-    xiaomiNames.append(item.text.strip())
-    urlsXiaomi.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-xiaomiPrices = returnPrice(helpArr)
-helpArr = []
-for xiaomiName in xiaomiNames:
-    xiaomiTvs[xiaomiName] = []
-    for i in range(0, len(xiaomiPrices)):
-        xiaomiTvs[xiaomiName].append(xiaomiPrices[i])
-        xiaomiPrices.remove(xiaomiPrices[i])
-        for j in range(0, len(urlsXiaomi)):
-            xiaomiTvs[xiaomiName].append(str(mainUrl + urlsXiaomi[j]))
-            urlsXiaomi.remove(urlsXiaomi[j])
-            break
-        break
+xiaomiNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+xiaomiPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 3):
+    xiaomiTvs[xiaomiNamesAndUrl[i].text.strip()] = [int(xiaomiPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + xiaomiNamesAndUrl[i].get('href'))]
 #--------------------------------------------------------------------------------------
 
 # TV SONY
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_sony.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    sonyNames.append(item.text.strip())
-    urlsSony.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-sonyPrices = returnPrice(helpArr)
-helpArr = []
-for sonyName in sonyNames:
-    sonyTvs[sonyName] = []
-    for i in range(0, len(sonyPrices)):
-        sonyTvs[sonyName].append(sonyPrices[i])
-        sonyPrices.remove(sonyPrices[i])
-        for j in range(0, len(urlsSony)):
-            sonyTvs[sonyName].append(str(mainUrl + urlsSony[j]))
-            urlsSony.remove(urlsSony[j])
-            break
-        break
+sonyNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+sonyPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    sonyTvs[sonyNamesAndUrl[i].text.strip()] = [int(sonyPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + sonyNamesAndUrl[i].get('href'))]
 #------------------------------------------------------------------------------------
 
 # TV PHILIPS
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_philips.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    philipsNames.append(item.text.strip())
-    urlsPhilips.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-philipsPrices = returnPrice(helpArr)
-helpArr = []
-for philipsName in philipsNames:
-    philipsTvs[philipsName] = []
-    for i in range(0, len(philipsPrices)):
-        philipsTvs[philipsName].append(philipsPrices[i])
-        philipsPrices.remove(philipsPrices[i])
-        for j in range(0, len(urlsPhilips)):
-            philipsTvs[philipsName].append(str(mainUrl + urlsPhilips[j]))
-            urlsPhilips.remove(urlsPhilips[j])
-            break
-        break
+philipsNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+philipsPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 26):
+    philipsTvs[philipsNamesAndUrl[i].text.strip()] = [int(philipsPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + philipsNamesAndUrl[i].get('href'))]
 #-----------------------------------------------------------------------------------------
 
 #TV TOSHIBA
 response = requests.get('https://www.foxtrot.com.ua/ru/shop/led_televizory_philips.html')
 soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('a', class_ = 'card__title')
-for item in helpArr:
-    if len(toshibaNames) == 11 and len(urlsToshiba) == 11:
-        break
-    toshibaNames.append(item.text.strip())
-    urlsToshiba.append(item.get('href'))
-helpArr = []
-soup = bs(response.text, 'lxml')
-helpArr = soup.find_all('div', class_ = 'card-price')
-toshibaPrices = returnPrice(helpArr)
-helpArr = []
-for toshibaName in toshibaNames:
-    toshibaTvs[toshibaName] = []
-    for i in range(0, len(toshibaPrices)):
-        toshibaTvs[toshibaName].append(toshibaPrices[i])
-        toshibaPrices.remove(toshibaPrices[i])
-        for j in range(0, len(urlsToshiba)):
-            toshibaTvs[toshibaName].append(str(mainUrl + urlsToshiba[j]))
-            urlsToshiba.remove(urlsToshiba[j])
-            break
-        break
+toshibaNamesAndUrl = soup.find_all('a', class_ = 'card__title')
+toshibaPrices = soup.find_all('div', class_ = 'card-price')
+for i in range(0, 11):
+    toshibaTvs[toshibaNamesAndUrl[i].text.strip()] = [int(toshibaPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + toshibaNamesAndUrl[i].get('href'))]
 #---------------------------------------------------------------------------------------
