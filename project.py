@@ -18,18 +18,6 @@ from screen import createTableScreenBrands, createSamsungScreen, createMsiScreen
 from screen import insertScreenBrands, insertSamsungScreen, insertMsiScreen, insertAsusScreen, insertLgScreen, insertDellScreen, insertBenqScreen, insertAocScreen, insertGigabytecreen, insertAcerScreen, insertHpScreen, insertPhilipsScreen, insertLenovoScreen
 from screen import screenBrandsAndAmount, samsungScreens, msiScreens, asusScreens, lgScreens, dellScreens, benqScreens, aocScreens, gigabyteScreens, acerScreens, hpScreens, philipsScreens, lenovoScreens
 
-def getPrice(helpArr):
-    priceArr = []
-    for item in helpArr:
-        price = item.text.strip()
-        new_price = price.split('₴')[0]
-        firstPart = new_price.split(' ')[0]
-        secondPart = new_price.split(' ')[1]
-        priceArr.append(int(firstPart + secondPart))
-    return priceArr
-
-
-
 def createConnection(databaseFile):
     connection = None
     try:
@@ -38,7 +26,6 @@ def createConnection(databaseFile):
     except Error as error:
         print(error)
     return connection
-
 
 def createCategoriesTable(connection):
     sql_create_table = """CREATE TABLE IF NOT EXISTS categories(
@@ -51,7 +38,6 @@ def createCategoriesTable(connection):
     except Error as error:
         print(error)
 
-
 def createProductsTable(connection):
     sql_create_table = """CREATE TABLE IF NOT EXISTS products(
                             id int PRIMARY KEY NOT NULL,
@@ -63,7 +49,6 @@ def createProductsTable(connection):
         cursor.execute(sql_create_table)
     except Error as error:
         print(error)
-
 
 def createPhonesBrandTable(connection):
     sql_create_table = """CREATE TABLE IF NOT EXISTS phone_brands(
@@ -129,38 +114,31 @@ def main():
     amount = []
     phonesBrand = []
 
-    namesSamsungPhones = []
-    urlsSamsungPhones = []
+    namesSamsungPhonesAndUrls = []
     samsungPhones = {}
     samsungPhonesPrices = []
 
-    namesIphones = []
-    urlsIphones = []
+    namesIphonesAndUrls = []
     iphones = {}
     iphonesPrice = []
 
-    xiaomiNames = []
-    urlsXiaomi = []
+    xiaomiNamesAndUrls = []
     xiaomiPhones = {}
     xiaomiPhonesPrice = []
 
-    oppoNames = []
-    urlsOppo = []
+    oppoNamesAndUrls = []
     oppoPhones = {}
     oppoPhonesPrice = []
 
-    huaweiNames = []
-    urlsHuawei = []
+    huaweiNamesAndUrls = []
     huaweiPhones = {}
     huaweiPhonesPrice = []
 
-    meizuNames = []
-    urlsMeizu = []
+    meizuNamesAndUrls = []
     meizuPhones = {}
     meizuPhonesPrice = []
 
-    oneplusNames = []
-    urlsOneplus = []
+    oneplusNamesAndUrls = []
     oneplusPhones = {}
     oneplusPhonesPrice = []
 
@@ -266,168 +244,65 @@ def main():
     # ТЕЛЕФОНЫ САМСУНГ
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_samsung_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        namesSamsungPhones.append(item.text.strip())
-        urlsSamsungPhones.append(item.get('href'))
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    samsungPhonesPrices = getPrice(helpArr)
-    helpArr = []
-    for nameSamgungPhone in namesSamsungPhones:
-        samsungPhones[nameSamgungPhone] = []
-        for i in range(0, len(samsungPhonesPrices)):
-            samsungPhones[nameSamgungPhone].append(samsungPhonesPrices[i])
-            samsungPhonesPrices.remove(samsungPhonesPrices[i])
-            for j in range(0, len(urlsSamsungPhones)):
-                samsungPhones[nameSamgungPhone].append(str(mainUrl + urlsSamsungPhones[j]))
-                urlsSamsungPhones.remove(urlsSamsungPhones[j])
-                break
-            break
+    namesSamsungPhonesAndUrls = soup.find_all('a', class_ = 'card__title')
+    samsungPhonesPrices = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 26):
+        samsungPhones[namesSamsungPhonesAndUrls[i].text.strip()] = [int(samsungPhonesPrices[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + namesSamsungPhonesAndUrls[i].get('href'))]
     #----------------------------------------------------------------------------------------------------
 
 
     # ТЕЛЕФОНЫ APPLE
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_apple_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        namesIphones.append(item.text.strip())
-        urlsIphones.append(item.get('href'))
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    iphonesPrice = getPrice(helpArr)
-    helpArr = []
-    for iphoneName in namesIphones:
-        iphones[iphoneName] = []
-        for i in range(0, len(iphonesPrice)):
-            iphones[iphoneName].append(iphonesPrice[i])
-            iphonesPrice.remove(iphonesPrice[i])
-            for j in range(0, len(urlsIphones)):
-                iphones[iphoneName].append(str(mainUrl + urlsIphones[j]))
-                urlsIphones.remove(urlsIphones[j])
-                break
-            break
+    namesIphonesAndUrls = soup.find_all('a', class_ = 'card__title')
+    iphonesPrice = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 26):
+        iphones[namesIphonesAndUrls[i].text.strip()] = [int(iphonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + namesIphonesAndUrls[i].get('href'))]
     #------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ СЯОМИ
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_xiaomi_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        xiaomiNames.append(item.text.strip())
-        urlsXiaomi.append(item.get('href'))
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    xiaomiPhonesPrice = getPrice(helpArr)
-    helpArr = []
-    for xiaomiName in xiaomiNames:
-        xiaomiPhones[xiaomiName] = []
-        for i in range(0, len(xiaomiPhonesPrice)):
-            xiaomiPhones[xiaomiName].append(xiaomiPhonesPrice[i])
-            xiaomiPhonesPrice.remove(xiaomiPhonesPrice[i])
-            for j in range(0, len(urlsXiaomi)):
-                xiaomiPhones[xiaomiName].append(str(mainUrl + urlsXiaomi[j]))
-                urlsXiaomi.remove(urlsXiaomi[j])
-                break
-            break
+    xiaomiNamesAndUrls = soup.find_all('a', class_ = 'card__title')
+    xiaomiPhonesPrice = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 26):
+        xiaomiPhones[xiaomiNamesAndUrls[i].text.strip()] = [int(xiaomiPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + xiaomiNamesAndUrls[i].get('href'))]
     #--------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ ОППО
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_oppo_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        if len(oppoNames) == 23 and len(urlsOppo) == 23:
-            break
-        oppoNames.append(item.text.strip())
-        urlsOppo.append(item.get('href'))
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    oppoPhonesPrice = getPrice(helpArr)
-    helpArr = []
-    for oppoName in oppoNames:
-        oppoPhones[oppoName] = []
-        for i in range(0, len(oppoPhonesPrice)):
-            oppoPhones[oppoName].append(oppoPhonesPrice[i])
-            oppoPhonesPrice.remove(oppoPhonesPrice[i])
-            for j in range(0, len(urlsOppo)):
-                oppoPhones[oppoName].append(str(mainUrl + urlsOppo[j]))
-                urlsOppo.remove(urlsOppo[j])
-                break
-            break
+    oppoNamesAndUrls  = soup.find_all('a', class_ = 'card__title')
+    oppoPhonesPrice  = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 24):
+        oppoPhones[oppoNamesAndUrls[i].text.strip()] = [int(oppoPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + oppoNamesAndUrls[i].get('href'))]
     #------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ ХУАВЕЙ
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_huawei_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        huaweiNames.append(item.text.strip())
-        urlsHuawei.append(item.get('href'))
-        if len(huaweiNames) == 10:
-            break
-        if len(urlsHuawei) == 10:
-            break
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    huaweiPhonesPrice = getPrice(helpArr)
-    helpArr = []
-    for huaweiName in huaweiNames:
-        huaweiPhones[huaweiName] = []
-        for i in range(0, len(huaweiPhonesPrice)):
-            huaweiPhones[huaweiName].append(huaweiPhonesPrice[i])
-            huaweiPhonesPrice.remove(huaweiPhonesPrice[i])
-            for j in range(0, len(urlsHuawei)):
-                huaweiPhones[huaweiName].append(str(mainUrl + urlsHuawei[j]))
-                urlsHuawei.remove(urlsHuawei[j])
-                break
-            break
+    huaweiNamesAndUrls = soup.find_all('a', class_ = 'card__title')
+    huaweiPhonesPrice = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 10):
+        huaweiPhones[huaweiNamesAndUrls[i].text.strip()] = [int(huaweiPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + huaweiNamesAndUrls[i].get('href'))]
     #--------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ МЕЙЗУ
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_meizu_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        meizuNames.append(item.text.strip())
-        urlsMeizu.append(item.get('href'))
-        if len(meizuNames) == 1 and len(urlsMeizu):
-            break
-    helpArr = []
-    helpArr = soup.find_all('div', class_ = 'card-price')
-    meizuPhonesPrice = getPrice(helpArr)
-    helpArr = []
-    for meizuName in meizuNames:
-        meizuPhones[meizuName] = []
-        for i in range(0, len(meizuPhonesPrice)):
-            meizuPhones[meizuName].append(meizuPhonesPrice[i])
-            for j in range(0, len(urlsMeizu)):
-                meizuPhones[meizuName].append(str(mainUrl + urlsMeizu[j]))
-                break
-            break
+    meizuNamesAndUrls = soup.find_all('a', class_ = 'card__title')
+    meizuPhonesPrice = soup.find_all('div', class_ = 'card-price')
+    for i in range(0, 1):
+        meizuPhones[meizuNamesAndUrls[i].text.strip()] = [int(meizuPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + meizuNamesAndUrls[i].get('href'))]
     #--------------------------------------------------------------------------------------------------
 
     # ТЕЛЕФОНЫ ВАНПЛЮС
     response = getResponse('https://www.foxtrot.com.ua/ru/shop/mobilnye_telefony_oneplus_smartfon.html')
     soup = bs(response.text, 'lxml')
-    helpArr = soup.find_all('a', class_ = 'card__title')
-    for item in helpArr:
-        oneplusNames.append(item.text.strip())
-        urlsOneplus.append(item.get('href'))
-    helpArr = []
-    helpArr = soup.find_all('div', 'card-price')
-    oneplusPhonesPrice = getPrice(helpArr)
-    for oneplusName in oneplusNames:
-        oneplusPhones[oneplusName] = []
-        for i in range(0, len(oneplusPhonesPrice)):
-            oneplusPhones[oneplusName].append(oneplusPhonesPrice[i])
-            oneplusPhonesPrice.remove(oneplusPhonesPrice[i])
-            for j in range(0, len(urlsOneplus)):
-                oneplusPhones[oneplusName].append(urlsOneplus[j])
-                urlsOneplus.remove(urlsOneplus[j])
-                break
-            break
+    oneplusNamesAndUrls = soup.find_all('a', class_ = 'card__title')
+    oneplusPhonesPrice = soup.find_all('div', 'card-price')
+    for i in range(0, 7):
+        oneplusPhones[oneplusNamesAndUrls[i].text.strip()] = [int(oneplusPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + oneplusNamesAndUrls[i].get('href'))]
     # ---------------------------------------------------------------------------------------------------
 
 
