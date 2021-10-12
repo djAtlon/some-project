@@ -3,7 +3,7 @@ import requests
 import sqlite3
 from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
-from requests.models import cookiejar_from_dict
+from requests.models import cookiejar_from_dict, guess_filename
 from phoneModels import createSamsungPhone, createApplePhone, createHuaweiPhone, createMeizuPhone, createOneplusPhone, createOppoPhone, createXiaomiPhone, insertSamsungPhones, insertApplePhones, insertHuaweiPhones, insertMeizuPhones, insertOneplusPhones, insertOppoPhones, insertXiaomiPhones
 from tvs import createTvBrands, createSamsungTv, createLgTv, createXiaomiTv, createSonyTv, createPhilipsTv, createToshibaTv, insertTvBrands,insertSamsungTv, insertLgTv, insertXiaomiTv, insertSonyTv, insertPhilipsTv, insertToshibaTv
 from tvs import tvBrandsAndStuff, samsungTvs, lgTvs, xiaomiTvs, sonyTvs, philipsTvs, toshibaTvs
@@ -17,6 +17,12 @@ from computer import createComputerProducts, insertComputerProducts, product_nam
 from screen import createTableScreenBrands, createSamsungScreen, createMsiScreen, createAsusScreen, createLgScreen, createDellScreen, createBenqScreen, createAocScreen, createGigabyteScreen, createAcerScreen, createHpScreen, createPhilipsScreen, createLenovoScreen
 from screen import insertScreenBrands, insertSamsungScreen, insertMsiScreen, insertAsusScreen, insertLgScreen, insertDellScreen, insertBenqScreen, insertAocScreen, insertGigabytecreen, insertAcerScreen, insertHpScreen, insertPhilipsScreen, insertLenovoScreen
 from screen import screenBrandsAndAmount, samsungScreens, msiScreens, asusScreens, lgScreens, dellScreens, benqScreens, aocScreens, gigabyteScreens, acerScreens, hpScreens, philipsScreens, lenovoScreens
+from mouse import createTableMouseBrands, createLogitechMouse, createRazerMouse, createAfourMouse, createHyperxMouse, createSteelSeriesMouse, createAppleMouse, createGeniusMouse, createLenovoMouse
+from mouse import insertMouseBrands, insertLogitechMouse, insertRazerMouse, insertAfourMouse, insertHyperxMouse, insertSteelSeriesMouse, insertAppleMouse, insertGeniusMouse, insertLenovoMouse
+from mouse import mouseBrandsAndAmount, logitech, razer, a4, hyperx, steel, appleMouses, genius, lenovoMouses
+from keyboard import createKeyboardBrands, createLogitechKeyboard, createHyperxKeyboard, createRazerKeyboard, createMsiKeyboard, createAfourTechKeyboard, createAppleKeyboard
+from keyboard import insertKeyboardBrands, insertLogitechKeyboard, insertHyperxKeyboard, insertRazerKeyboard, insertMsiKeyboard, insertAfourKeyboard, insertAppleKeyboard
+from keyboard import keyboardBrandsAndAmount, logitechKeyboards, hyperxKeyboards, razerKeyboards, msiKeyboards, a4Keyboards, appleKeyboards
 
 def createConnection(databaseFile):
     connection = None
@@ -458,6 +464,7 @@ def main():
         for huaweiId, huaweiName in enumerate(huaweiTablets, start=1):
             h = (huaweiId, huaweiName, huaweiTablets.get(huaweiName)[0], 5, huaweiTablets.get(huaweiName)[1])
             insertHuaweiTablet(connection, h)
+            Keyboard
     # СОЗДАНИЕ ТАБЛИЦ ДЛЯ ПРОДУКТОВ КОМПЬЮТЕРНОЙ ПЕРИФЕРИИ
     with connection:
         createComputerProducts(connection)
@@ -519,6 +526,76 @@ def main():
         for lenovoId, lenovo in enumerate(lenovoScreens, start=1):
             l = (lenovoId, lenovo, lenovoScreens.get(lenovo)[0], lenovoScreens.get(lenovo)[1])
             insertLenovoScreen(connection, l)
+
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ БРЕНДОВ КОМП МЫШЕЙ
+    with connection:
+        createTableMouseBrands(connection)
+        createLogitechMouse(connection)
+        createRazerMouse(connection)
+        createAfourMouse(connection)
+        createHyperxMouse(connection)
+        createSteelSeriesMouse(connection)
+        createAppleMouse(connection)
+        createGeniusMouse(connection)
+        createLenovoMouse(connection)
+        for mouseBrandId, mouseBrand in enumerate(mouseBrandsAndAmount, start=1):
+            m = (mouseBrandId, mouseBrand, mouseBrandsAndAmount.get(mouseBrand))
+            insertMouseBrands(connection, m)
+        for logitechId, logitechName in enumerate(logitech, start=1):
+            l = (logitechId, logitechName, logitech.get(logitechName)[0], logitech.get(logitechName)[1])
+            insertLogitechMouse(connection, l)
+        for razerId, razerName in enumerate(razer, start=1):
+            r = (razerId, razerName, razer.get(razerName)[0],razer.get(razerName)[1])
+            insertRazerMouse(connection, r)
+        for aId, aName in enumerate(a4, start=1):
+            a = (aId, aName, a4.get(aName)[0], a4.get(aName)[1])
+            insertAfourMouse(connection, a)
+        for hyperxId, hyperxName in enumerate(hyperx, start=1):
+            h = (hyperxId, hyperxName, hyperx.get(hyperxName)[0], hyperx.get(hyperxName)[1])
+            insertHyperxMouse(connection, h)
+        for steelId, steelName in enumerate(steel, start=1):
+            s = (steelId, steelName, steel.get(steelName)[0], steel.get(steelName)[1])
+            insertSteelSeriesMouse(connection, s)
+        for appleMouseId, appleMouseName in enumerate(appleMouses, start=1):
+            a = (appleMouseId, appleMouseName, appleMouses.get(appleMouseName)[0], appleMouses.get(appleMouseName)[1])
+            insertAppleMouse(connection, a)
+        for geniusId, geniusMouse in enumerate(genius, start=1):
+            g = (geniusId, geniusMouse, genius.get(geniusMouse)[0], genius.get(geniusMouse)[1])
+            insertGeniusMouse(connection, g)
+        for lenovoMouseId, lenovoMouse in enumerate(lenovoMouses, start=1):
+            l = (lenovoMouseId, lenovoMouse, lenovoMouses.get(lenovoMouse)[0], lenovoMouses.get(lenovoMouse)[1])
+            insertLenovoMouse(connection, l)
+    
+    # СОЗДАНИЕ ТАБЛИЦ ДЛЯ БРЕНДОВ КЛАВИАТУР
+    with connection:
+        createKeyboardBrands(connection)
+        createLogitechKeyboard(connection)
+        createHyperxKeyboard(connection)
+        createRazerKeyboard(connection)
+        createMsiKeyboard(connection)
+        createAfourTechKeyboard(connection)
+        createAppleKeyboard(connection)
+        for keyboardBrandId, keyboardBrand in enumerate(keyboardBrandsAndAmount, start=1):
+            k = (keyboardBrandId, keyboardBrand, keyboardBrandsAndAmount.get(keyboardBrand))
+            insertKeyboardBrands(connection, k)
+        for logitechKeyboardId, logitechKeyboard in enumerate(logitechKeyboards, start=1):
+            l = (logitechKeyboardId, logitechKeyboard, logitechKeyboards.get(logitechKeyboard)[0], logitechKeyboards.get(logitechKeyboard)[1])
+            insertLogitechKeyboard(connection, l)
+        for hyperxKeyboardId, hyperxKeyboard in enumerate(hyperxKeyboards, start=1):
+            h = (hyperxKeyboardId, hyperxKeyboard, hyperxKeyboards.get(hyperxKeyboard)[0], hyperxKeyboards.get(hyperxKeyboard)[1])
+            insertHyperxKeyboard(connection, h)
+        for razerKeyboardId, razerKeyboard in enumerate(razerKeyboards, start=1):
+            r = (razerKeyboardId, razerKeyboard, razerKeyboards.get(razerKeyboard)[0], razerKeyboards.get(razerKeyboard)[1])
+            insertRazerKeyboard(connection, r)
+        for msiKeyboardId, msiKeyboard in enumerate(msiKeyboards, start=1):
+            m =  (msiKeyboardId, msiKeyboard, msiKeyboards.get(msiKeyboard)[0], msiKeyboards.get(msiKeyboard)[1])
+            insertMsiKeyboard(connection, m)
+        for aKeyboardId, aKeyboard in enumerate(a4Keyboards, start=1):
+            a = (aKeyboardId, aKeyboard, a4Keyboards.get(aKeyboard)[0], a4Keyboards.get(aKeyboard)[1])
+            insertAfourKeyboard(connection, a)
+        for appleKeyboardId, appleKeyboard in enumerate(appleKeyboards, start=1):
+            a = (appleKeyboardId, appleKeyboard, appleKeyboards.get(appleKeyboard)[0], appleKeyboards.get(appleKeyboard)[1])
+            insertAppleKeyboard(connection, a)
     #-----------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
