@@ -1,9 +1,7 @@
-from sqlite3.dbapi2 import connect
 import requests
 import sqlite3
 from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
-from requests.models import cookiejar_from_dict, guess_filename
 from phoneModels import createSamsungPhone, createApplePhone, createHuaweiPhone, createMeizuPhone, createOneplusPhone, createOppoPhone, createXiaomiPhone, insertSamsungPhones, insertApplePhones, insertHuaweiPhones, insertMeizuPhones, insertOneplusPhones, insertOppoPhones, insertXiaomiPhones
 from tvs import createTvBrands, createSamsungTv, createLgTv, createXiaomiTv, createSonyTv, createPhilipsTv, createToshibaTv, insertTvBrands,insertSamsungTv, insertLgTv, insertXiaomiTv, insertSonyTv, insertPhilipsTv, insertToshibaTv
 from tvs import tvBrandsAndStuff, samsungTvs, lgTvs, xiaomiTvs, sonyTvs, philipsTvs, toshibaTvs
@@ -106,7 +104,8 @@ def getResponse(url):
 
 
 def main():
-    databaseFile = r'C:\work\tb\uni\project\some-project\database.db'
+    #databaseFile = r'C:\work\tb\uni\project\some-project\database.db' #work
+    databaseFile = r'C:\stuff\uni_course 4\pythonStuff\some-project\database.db' #home
     connection = createConnection(databaseFile)
     mainUrl = 'https://www.foxtrot.com.ua'
     response = getResponse('https://www.foxtrot.com.ua/')
@@ -280,7 +279,7 @@ def main():
     soup = bs(response.text, 'lxml')
     oppoNamesAndUrls  = soup.find_all('a', class_ = 'card__title')
     oppoPhonesPrice  = soup.find_all('div', class_ = 'card-price')
-    for i in range(0, 24):
+    for i in range(0, 23):
         oppoPhones[oppoNamesAndUrls[i].text.strip()] = [int(oppoPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + oppoNamesAndUrls[i].get('href'))]
     #------------------------------------------------------------------------------------------------
 
@@ -307,7 +306,7 @@ def main():
     soup = bs(response.text, 'lxml')
     oneplusNamesAndUrls = soup.find_all('a', class_ = 'card__title')
     oneplusPhonesPrice = soup.find_all('div', 'card-price')
-    for i in range(0, 7):
+    for i in range(0, 6):
         oneplusPhones[oneplusNamesAndUrls[i].text.strip()] = [int(oneplusPhonesPrice[i].text.strip().replace(' ', '').split('₴')[0]), str(mainUrl + oneplusNamesAndUrls[i].get('href'))]
     # ---------------------------------------------------------------------------------------------------
 
@@ -464,7 +463,6 @@ def main():
         for huaweiId, huaweiName in enumerate(huaweiTablets, start=1):
             h = (huaweiId, huaweiName, huaweiTablets.get(huaweiName)[0], 5, huaweiTablets.get(huaweiName)[1])
             insertHuaweiTablet(connection, h)
-            Keyboard
     # СОЗДАНИЕ ТАБЛИЦ ДЛЯ ПРОДУКТОВ КОМПЬЮТЕРНОЙ ПЕРИФЕРИИ
     with connection:
         createComputerProducts(connection)
