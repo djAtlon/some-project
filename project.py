@@ -1,4 +1,5 @@
 import requests
+import telebot
 import sqlite3
 from sqlite3 import Error
 from bs4 import BeautifulSoup as bs
@@ -104,8 +105,8 @@ def getResponse(url):
 
 
 def main():
-    databaseFile = r'C:\work\tb\uni\project\some-project\database.db' #work
-    # databaseFile = r'C:\stuff\uni_course 4\pythonStuff\some-project\database.db' #home
+    # databaseFile = r'C:\work\tb\uni\project\some-project\database.db' #work
+    databaseFile = r'C:\stuff\uni_course 4\pythonStuff\some-project\database.db' #home
     connection = createConnection(databaseFile)
     mainUrl = 'https://www.foxtrot.com.ua'
     response = getResponse('https://www.foxtrot.com.ua/')
